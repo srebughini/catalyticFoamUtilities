@@ -52,9 +52,9 @@ int main(int argc, char **argv)
 			OUT[k] = 0.;
 		}
 
-		for (int j=0;j<listInletBoundaries.size();j++)
+		for (int i=0;i<listOutletBoundaries.size();i++)
 		{
-			label patchID = mesh.boundaryMesh().findPatchID(listInletBoundaries[j]); 
+			label patchID = mesh.boundaryMesh().findPatchID(listInletBoundaries[i]); 
 			forAll (p.boundaryField()[patchID], facei)
 			{
 				thermodynamicsMapXML->SetPressure(p.boundaryField()[patchID][facei]);
@@ -63,14 +63,23 @@ int main(int argc, char **argv)
 				{
 					Element = SpecieAtomicComposition.col(k);
 					for (j=0;j<thermodynamicsMapXML->NumberOfSpecies();j++)
-						IN[k] += Y[j].boundaryField()[patchID][facei]*phi.boundaryField()[patchID][facei]*Element[j]/thermodynamicsMapXML->MW()[j+1];
+					{
+						IN[k] -= Y[j].boundaryField()[patchID][facei]*phi.boundaryField()[patchID][facei]*Element[j]/thermodynamicsMapXML->MW()[j+1];
+						/*Info << " specie numero : " << j + 1 << endl;
+						Info << " Elemento x specie:       " << Element[j] << endl;
+						Info << " Elemento:         " << ElementsNames[k] << endl;
+						Info << " Frazione massiva: " << Y[j].boundaryField()[patchID][facei] << endl;
+						Info << " Phi:              " << phi.boundaryField()[patchID][facei] << endl;
+						Info << " In tot:           " << IN[k] << endl;*/
+					}
+					//getchar();
 				}
 			}
 		}
 
-		for (int j=0;j<listOutletBoundaries.size();j++)
+		for (int i=0;i<listOutletBoundaries.size();i++)
 		{
-			label patchID = mesh.boundaryMesh().findPatchID(listOutletBoundaries[j]); 
+			label patchID = mesh.boundaryMesh().findPatchID(listOutletBoundaries[i]); 
 			forAll (p.boundaryField()[patchID], facei)
 			{
 				thermodynamicsMapXML->SetPressure(p.boundaryField()[patchID][facei]);
@@ -84,24 +93,24 @@ int main(int argc, char **argv)
 			}
 		}
 
-	std::vector<double> AtomicError;
-	std::ofstream error;
-	error.open("atomicBalance.txt",std::ios::out);
-	Info << "\nATOMIC BALANCE               " << endl;
-	error << "\nATOMIC BALANCE               " << endl;
-	AtomicError.resize(IN.size());
-	for (int k=0;k<IN.size();k++)
-	{
-		AtomicError[k] = (IN[k] + OUT[k])*100./IN[k];
-		if ( IN[k] > 1.e-16 )
+		std::vector<double> AtomicError;
+		std::ofstream error;
+		error.open("atomicBalance.txt",std::ios::out);
+		Info << "\nATOMIC BALANCE               " << endl;
+		error << "\nATOMIC BALANCE               " << endl;
+		AtomicError.resize(IN.size());
+		for (int k=0;k<IN.size();k++)
 		{
-			Info << ElementsNames[k] << " :\t" << fabs(AtomicError[k]) << "\t[%]" << endl;
-			error << ElementsNames[k] << " :\t" << fabs(AtomicError[k]) << "\t[%]" << endl;
+			AtomicError[k] = (IN[k] - OUT[k])*100./IN[k];
+			//if ( IN[k] > 1.e-16 )
+			{
+				Info << ElementsNames[k] << " :\t" << AtomicError[k] << "\t[%]" << endl;
+				error << ElementsNames[k] << " :\t" << AtomicError[k] << "\t[%]" << endl;
+			}
 		}
-	}
-	Info << "\n" << endl;
-	
-	error.close();
+		Info << "\n" << endl;
+
+		error.close();
 
 
 	}

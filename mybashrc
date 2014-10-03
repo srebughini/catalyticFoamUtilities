@@ -1,29 +1,25 @@
+#OpenFOAM VERSION (22 or 23)
+export OPENFOAM_VERSION='-DOPENFOAM_VERSION=23'
+
 #Compulsory path
-export EIGEN=$HOME/OpenFOAM/NumericalLibraries/Eigen/eigen-3.2
-export BOOST=$HOME/OpenFOAM/NumericalLibraries/Boost/boost_1_55_0/build
-export RAPIDXML=$HOME/OpenFOAM/NumericalLibraries/RapidXML/rapidxml-1.13 
-export OPENSMOKE=$HOME/OpenFOAM/NumericalLibraries/OpenSMOKEpp/source
-export BZZ=$HOME/OpenFOAM/NumericalLibraries/BzzMath6/BzzMath6-dev
+export EIGEN_LIBRARY_PATH=$HOME/OpenFOAM/NumericalLibraries/Eigen/eigen-3.2
+export BOOST_LIBRARY_PATH=$HOME/OpenFOAM/NumericalLibraries/Boost/boost_1_55_0/build
+export RAPIDXML_LIBRARY_PATH=$HOME/OpenFOAM/NumericalLibraries/RapidXML/rapidxml-1.13 
+export OPENSMOKE_LIBRARY_PATH=$HOME/OpenFOAM/NumericalLibraries/OpenSMOKEpp/source
 
-#Options for "HoneyCombFiniteDifference"
-export COMPILE_CHECKINPUT=1
-export COMPILE_MODEL=1
-export COMPILE_POSTPROCESSOR=1
-export COMPILE_WITH_MKL=1
 
-#Options for MKL
-
-#export MKL_SUPPORT='-DOPENSMOKE_USE_MKL=1' 
-#export EXTERNAL_ODE_SOLVERS='-DOPENSMOKE_USE_DVODE=1 -DOPENSMOKE_USE_ODEPACK=1 -DOPENSMOKE_USE_RADAU=1 -DOPENSMOKE_USE_DASPK=1 -DOPENSMOKE_USE_MEBDF=1 -DOPENSMOKE_USE_SUNDIALS=1'
-export EXTERNAL_ODE_SOLVERS=
+#Options
 export MKL_SUPPORT=
+export EXTERNAL_ODE_SOLVERS=
 
 
 #Only if the OPENSMOKE_USE_MKL is turned on
-export MKL_PATH=/opt/intel/mkl
-export MKL_INCLUDE=$MKL_PATH/include
+export MKL_PATH=$HOME/intel/mkl
+export MKL_INCLUDE='$(MKL_PATH)/include'
+export MKL_LIBS=
 
-#Optional external ODE solvers for "oneDimensionalFOAM"
+
+#Optional external ODE solvers
 export MEBDF_LIBS=
 export RADAU_LIBS=
 export DASPK_LIBS=
