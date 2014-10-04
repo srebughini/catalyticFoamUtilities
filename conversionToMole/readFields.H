@@ -40,20 +40,6 @@ volScalarField p
     mesh
 );
 
-Info<< "Reading field phi\n" << endl;
-surfaceScalarField phi
-(
-	IOobject
-	(
-		"phi",
-		runTime.timeName(),
-		mesh,
-		IOobject::MUST_READ,
-		IOobject::NO_WRITE
-	),
-	mesh
-);
-
 Info<< "Reading chemical species mole fractions or mass fractions..." << endl;
 
 PtrList<volScalarField> Y(thermodynamicsMapXML->NumberOfSpecies());

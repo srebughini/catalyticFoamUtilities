@@ -26,9 +26,8 @@ int main(int argc, char **argv)
 	while (runTime.run())
 	{
 		runTime++;
-		runTime.write();
-
 		#include "properties.H"
+		runTime.write();
 	}
 
 	Info<< "End\n" << endl;
