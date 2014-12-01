@@ -14,27 +14,13 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 	// Solver setup (folders, mesh, etc.)
-		#include "setRootCase.H"
-		#include "createTime.H"
-		#include "createMesh.H"
+	#include "setRootCase.H"
+	#include "createTime.H"
+	#include "createMesh.H"
 
-		#include "readTimeControls.H"
+	#include "readTimeControls.H"
 
-		Info<< "Time = " << runTime.timeName() << nl << endl;
-
-		Info<< "Reading field U" << endl;
-		volVectorField U
-		(
-			IOobject
-			(
-				"U",
-				runTime.timeName(),
-				mesh,
-				IOobject::MUST_READ,
-				IOobject::AUTO_WRITE
-			),
-			mesh
-		);
+	Info<< "Time = " << runTime.timeName() << nl << endl;
 
 	#include "readSolverOptions.H"
 
