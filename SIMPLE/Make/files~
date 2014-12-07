@@ -1,3 +1,0 @@
-catalyticSimpleFOAM.C
-
-EXE = $(FOAM_USER_APPBIN)/catalyticSimpleFOAM_v0.1
