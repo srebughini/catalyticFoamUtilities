@@ -67,7 +67,7 @@ const dictionary& kineticsDictionary = solverOptions.subDict("Kinetics");
 }
 List<word>  listInletBoundaries;
 List<word>  listOutletBoundaries;
-const dictionary& postProcessingDictionary = solverOptions.subDict("postProcessing");
+const dictionary& postProcessingDictionary = solverOptions.subDict("PostProcessing");
 {
 	// List of inlet boundaries
 	listInletBoundaries=List<word>(postProcessingDictionary.lookup("inletBoundaries"));

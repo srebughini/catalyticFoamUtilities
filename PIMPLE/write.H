@@ -42,7 +42,8 @@ std::cout << "---------------------------------------------------" << std::endl;
 Info << "	Atomic balance error [-]" << endl;
 for (int index=0;index<elementNames_.size();index++)
 {
-	std::cout << elementNames_[index] << "\t" << (ElementInlet[index+1] - ElementOutlet[index+1])*100/ElementInlet[index+1]  << "\t[%]" << std::endl;
+	if ( ElementInlet[index+1] > 0 )
+		std::cout << elementNames_[index] << "\t" << (ElementInlet[index+1] - ElementOutlet[index+1])*100/ElementInlet[index+1]  << "\t[%]" << std::endl;
 }
 std::cout << "---------------------------------------------------" << std::endl;
 
@@ -94,6 +95,7 @@ fmassFlux << " " << std::endl;
 fmassFlux << "	Atomic balance error [-]" << std::endl;
 for (int index=0;index<elementNames_.size();index++)
 {
-	fmassFlux << elementNames_[index] << "\t" << (ElementInlet[index+1] - ElementOutlet[index+1])*100/ElementInlet[index+1]  << "\t[%]" << std::endl;
+	if ( ElementInlet[index+1] > 0 )
+		fmassFlux << elementNames_[index] << "\t" << (ElementInlet[index+1] - ElementOutlet[index+1])*100/ElementInlet[index+1]  << "\t[%]" << std::endl;
 }
 fmassFlux.close();
