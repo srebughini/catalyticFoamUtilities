@@ -12,6 +12,20 @@ volVectorField U
     mesh
 );
 
+Info<< "Reading field magU\n" << endl;
+volScalarField magU
+(
+    IOobject
+    (
+        "magU",
+        runTime.timeName(),
+        mesh,
+        IOobject::MUST_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh
+);
+
 //- Reading pressure [Pa]
 Info<< "Reading field p\n" << endl;
 volScalarField p

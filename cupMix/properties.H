@@ -37,6 +37,9 @@
 				
 			thermodynamicsMapXML->MoleFractions_From_MassFractions(moleFractions,MWmixCells[celli],massFractions);
 
+			for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
+				x[i].internalField()[celli] = moleFractions[i+1];
+			
 			cTotCells[celli] = pCells[celli]/PhysicalConstants::R_J_kmol/TCells[celli];
 			psiCells[celli]  = cTotCells[celli]*MWmixCells[celli]/pCells[celli];
 			thermodynamicsMapXML->hMolar_Mixture_From_MoleFractions(hCells[celli], moleFractions);		// [J/kmol]
@@ -123,6 +126,8 @@
 
 			thermodynamicsMapXML->MoleFractions_From_MassFractions(moleFractions,pMWmix[facei],massFractions);
 
+			for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
+				 x[i].boundaryField()[patchi][facei] = moleFractions[i+1];
 
 			pcTot[facei] = pp[facei]/(PhysicalConstants::R_J_kmol*pT[facei]);
 			ppsi[facei]  = pcTot[facei]*pMWmix[facei]/pp[facei];

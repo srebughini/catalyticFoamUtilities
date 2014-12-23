@@ -5,7 +5,7 @@ PtrList<volScalarField> Y(thermodynamicsMapXML->NumberOfSpecies());
 PtrList<volScalarField> Dmix(thermodynamicsMapXML->NumberOfSpecies());
 PtrList<volScalarField> HSpecies(thermodynamicsMapXML->NumberOfSpecies());
 PtrList<volScalarField> Ygrad(thermodynamicsMapXML->NumberOfSpecies());
-
+PtrList<volScalarField> x(thermodynamicsMapXML->NumberOfSpecies());
 
 for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
 {
@@ -111,6 +111,24 @@ for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
 			)
 		);
 	}
+
+	x.set
+	(
+		i,
+		new volScalarField
+		(
+			IOobject
+			(
+				"mole_"+thermodynamicsMapXML->NamesOfSpecies()[i],
+				mesh.time().timeName(),
+				mesh,
+				IOobject::NO_READ,
+				IOobject::AUTO_WRITE
+			),
+			mesh,
+			dimensionSet(0, 0, 0, 0, 0)
+		)
+	);
 
 	// Sets of diffusivities and specific heats of species
 	{
