@@ -22,6 +22,7 @@
 		scalarField& phixCells = phix.internalField();
 		scalarField& phiyCells = phiy.internalField();
 		scalarField& phizCells = phiz.internalField();
+		scalarField& magUcells = magU.internalField();
 
 		forAll(TCells, celli)
 		{
@@ -44,12 +45,14 @@
 			psiCells[celli]  = cTotCells[celli]*MWmixCells[celli]/pCells[celli];
 			thermodynamicsMapXML->hMolar_Mixture_From_MoleFractions(hCells[celli], moleFractions);		// [J/kmol]
 			hCells[celli] /= MWmixCells[celli];															// [J/kg]
-			
+
 			phixCells[celli] = cTotCells[celli]*MWmixCells[celli]*UCells[celli].component(0);
 			phiyCells[celli] = cTotCells[celli]*MWmixCells[celli]*UCells[celli].component(1);
 			phizCells[celli] = cTotCells[celli]*MWmixCells[celli]*UCells[celli].component(2);
 
-			//if (viscositySpecies == true)
+			for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
+				massPerPhi[i].internalField()[celli]= cTotCells[celli]*MWmixCells[celli]*magUcells[celli]*Y[i].internalField()[celli];
+
 			{
 				transportMapXML->DynamicViscosity(muCells[celli],moleFractions);
 			}
@@ -112,6 +115,7 @@
         fvPatchScalarField& pphix = phix.boundaryField()[patchi];
         fvPatchScalarField& pphiy = phiy.boundaryField()[patchi];
         fvPatchScalarField& pphiz = phiz.boundaryField()[patchi];
+		fvPatchScalarField& pmagU = magU.boundaryField()[patchi];
 
 		forAll(pT, facei)
 		{
@@ -138,7 +142,9 @@
 			pphiy[facei] = pcTot[facei]*pMWmix[facei]*pU[facei].component(1);
 			pphiz[facei] = pcTot[facei]*pMWmix[facei]*pU[facei].component(2);
 
-			//if (viscositySpecies == true)
+			for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
+				massPerPhi[i].boundaryField()[patchi][facei] = pcTot[facei]*pMWmix[facei]*pmagU[facei]*Y[i].boundaryField()[patchi][facei];
+
 			{
 				transportMapXML->DynamicViscosity(pmu[facei],moleFractions);
 			}
