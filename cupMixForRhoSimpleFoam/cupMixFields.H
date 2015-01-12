@@ -65,6 +65,20 @@ volScalarField cuph_over_T
 	dimensionSet(0, 3, -3, 0, -1)
 );
 
+volScalarField cupT
+(
+	IOobject
+	(
+		"cup::T",
+		runTime.timeName(),
+		mesh,
+		IOobject::NO_READ,
+		IOobject::AUTO_WRITE
+	),
+	mesh,
+	dimensionSet(0, 1, -1, 0, -1)
+);
+
 volScalarField magU
 (
 	IOobject
