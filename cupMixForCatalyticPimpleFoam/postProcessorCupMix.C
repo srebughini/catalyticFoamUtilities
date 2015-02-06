@@ -7,9 +7,6 @@
 // Reactor utilities
 #include "reactors/utilities/Utilities"
 
-// Additional classes
-#include "catalyticReactorClass.H"
-
 // ODE solvers
 #include "math/multivalue-ode-solvers/MultiValueSolver"
 #include "ode/ODE_Parameters.h"
@@ -21,7 +18,6 @@
 #include "fvIOoptionList.H"
 
 // Additional include files
-#include "sparkModel.H"
 #include "userDefinedFunctions.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -38,7 +34,6 @@ int main(int argc, char *argv[])
 	#include "createAdditionalFields.H"
 	#include "createCatalyticFields.H"
 	#include "createFvOptions.H"
-	#include "catalystTopology.H"
 	#include "memoryAllocation.H"
 	#include "properties.H"
 	#include "finalSetupOperations.H"

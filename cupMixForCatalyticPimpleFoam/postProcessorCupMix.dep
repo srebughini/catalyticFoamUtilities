@@ -51,7 +51,6 @@ postProcessorCupMix.dep: /home/stefano/OpenFOAM/NumericalLibraries/OpenSMOKEpp/s
 postProcessorCupMix.dep: /home/stefano/OpenFOAM/NumericalLibraries/OpenSMOKEpp/source/reactors/utilities/Grammar_GasStatus.h
 postProcessorCupMix.dep: /home/stefano/OpenFOAM/NumericalLibraries/OpenSMOKEpp/source/reactors/utilities/Grammar_XYProfile.h
 postProcessorCupMix.dep: /home/stefano/OpenFOAM/NumericalLibraries/OpenSMOKEpp/source/reactors/utilities/Grammar_SurfaceComposition.h
-postProcessorCupMix.dep: catalyticReactorClass.H
 postProcessorCupMix.dep: /home/stefano/OpenFOAM/NumericalLibraries/OpenSMOKEpp/source/math/multivalue-ode-solvers/MultiValueSolver
 postProcessorCupMix.dep: /home/stefano/OpenFOAM/NumericalLibraries/OpenSMOKEpp/source/ode/ODE_Parameters.h
 postProcessorCupMix.dep: /home/stefano/OpenFOAM/NumericalLibraries/OpenSMOKEpp/source/math/OpenSMOKEFunctions.h
@@ -737,7 +736,6 @@ postProcessorCupMix.dep: $(WM_PROJECT_DIR)/src/sampling/lnInclude/meshToMeshTemp
 postProcessorCupMix.dep: $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/directFvPatchFieldMapper.H
 postProcessorCupMix.dep: $(WM_PROJECT_DIR)/src/fvOptions/lnInclude/fvOptionI.H
 postProcessorCupMix.dep: $(WM_PROJECT_DIR)/src/fvOptions/lnInclude/fvOptionListTemplates.C
-postProcessorCupMix.dep: sparkModel.H
 postProcessorCupMix.dep: userDefinedFunctions.H
 postProcessorCupMix.dep: $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/setRootCase.H
 postProcessorCupMix.dep: $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/createTime.H
@@ -746,10 +744,8 @@ postProcessorCupMix.dep: $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/readGravit
 postProcessorCupMix.dep: createBasicFields.H
 postProcessorCupMix.dep: readSolverOptions.H
 postProcessorCupMix.dep: createAdditionalFields.H
-postProcessorCupMix.dep: createFluxes.H
 postProcessorCupMix.dep: createCatalyticFields.H
 postProcessorCupMix.dep: $(WM_PROJECT_DIR)/src/fvOptions/lnInclude/createFvOptions.H
-postProcessorCupMix.dep: catalystTopology.H
 postProcessorCupMix.dep: memoryAllocation.H
 postProcessorCupMix.dep: properties.H
 postProcessorCupMix.dep: finalSetupOperations.H

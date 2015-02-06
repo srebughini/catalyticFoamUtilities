@@ -53,4 +53,4 @@
 # 1 "files"
 postProcessorCupMix.C
 
-EXE = $(FOAM_USER_APPBIN)/postProcessorCupMix
+EXE = $(FOAM_USER_APPBIN)/postProcessorCupMixForCatalyticPimpleFoam

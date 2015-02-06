@@ -10,7 +10,7 @@ volScalarField rho
 		IOobject::NO_READ,
 		IOobject::AUTO_WRITE
 	),
-	Rho(p,psi)
+	Rho(p,T)
 );
 
 #include "compressibleCreatePhi.H"
