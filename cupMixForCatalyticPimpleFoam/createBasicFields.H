@@ -133,3 +133,17 @@ volScalarField phiz
     mesh,
     dimensionSet(1,0,-1,0,0)
 );
+
+volScalarField cupT
+(
+    IOobject
+    (
+        "gas::T",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionSet(1,0,-1,1,0)
+);

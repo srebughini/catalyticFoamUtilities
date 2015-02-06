@@ -18,6 +18,7 @@
 		scalarField& phiyCells = phiy.internalField();
 		scalarField& phizCells = phiz.internalField();
 		scalarField& magUcells = magU.internalField();
+		scalarField& cupTcells = cupT.internalField();
 
 		forAll(TCells, celli)
 		{
@@ -41,6 +42,7 @@
 			phixCells[celli] = cTotCells[celli]*MWmixCells[celli]*UCells[celli].component(0);
 			phiyCells[celli] = cTotCells[celli]*MWmixCells[celli]*UCells[celli].component(1);
 			phizCells[celli] = cTotCells[celli]*MWmixCells[celli]*UCells[celli].component(2);
+			cupTcells[celli] = TCells[celli]*cTotCells[celli]*MWmixCells[celli]*magUcells[celli];
 
 			for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
 				massPerPhi[i].internalField()[celli]= cTotCells[celli]*MWmixCells[celli]*magUcells[celli]*Y[i].internalField()[celli];
@@ -60,6 +62,7 @@
         fvPatchScalarField& pphiy = phiy.boundaryField()[patchi];
         fvPatchScalarField& pphiz = phiz.boundaryField()[patchi];
 		fvPatchScalarField& pmagU = magU.boundaryField()[patchi];
+		fvPatchScalarField& pcupT = cupT.boundaryField()[patchi];
 
 		forAll(pT, facei)
 		{
@@ -82,6 +85,8 @@
 			pphix[facei] = pcTot[facei]*pMWmix[facei]*pU[facei].component(0);
 			pphiy[facei] = pcTot[facei]*pMWmix[facei]*pU[facei].component(1);
 			pphiz[facei] = pcTot[facei]*pMWmix[facei]*pU[facei].component(2);
+
+			pcupT[facei] = pT[facei]*pcTot[facei]*pMWmix[facei]*pmagU[facei];
 
 			for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
 				massPerPhi[i].boundaryField()[patchi][facei] = pcTot[facei]*pMWmix[facei]*pmagU[facei]*Y[i].boundaryField()[patchi][facei];
