@@ -15,12 +15,15 @@
 #include "fvCFD.H"
 #include "multivariateScheme.H"
 #include "pimpleControl.H"
-#include "fvIOoptionList.H"
+
+#if OPENFOAM_VERSION == 22
+	#include "fvIOoptionList.H"
+#elseif OPENFOAM_VERSION == 23
+	#include "fvIOoptionList.H"
+#endif
 
 // Additional include files
 #include "userDefinedFunctions.H"
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
 {
@@ -32,10 +35,13 @@ int main(int argc, char *argv[])
 	#include "createBasicFields.H"
 	#include "readSolverOptions.H"
 	#include "createAdditionalFields.H"
-	#include "createCatalyticFields.H"
-	#include "createFvOptions.H"
-	#include "memoryAllocation.H"
-	#include "properties.H"
+
+	#if OPENFOAM_VERSION == 22
+		#include "createFvOptions.H"
+	#elseif OPENFOAM_VERSION == 23
+		#include "createFvOptions.H"
+	#endif
+
 	#include "finalSetupOperations.H"
 
 	#include "initContinuityErrs.H"
@@ -45,16 +51,18 @@ int main(int argc, char *argv[])
 
 	pimpleControl pimple(mesh);
 
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
+	bool cupMixExit = true;
 	while (runTime.run())
 	{
+		if (cupMixExit != true)
+		{
+			Info << "ERROR: please set writeNow in controlDict options" << endl;
+			exit(-1);
+		}
 		runTime++;
 		runTime.write();
-		Info<< "Run only one FAKE time step!!!" << endl;
+		cupMixExit = false;
 	}
 
     return 0;
 }
-
-// ************************************************************************* //

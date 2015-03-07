@@ -1,9 +1,6 @@
 EXE_INC = \
     $(OPENFOAM_VERSION) \
     -w \
-    $(MKL_SUPPORT) \
-    $(ISAT_SUPPORT) \
-    $(EXTERNAL_ODE_SOLVERS) \
     -Iode \
     -Ipolicies \
     -Iisat \
@@ -11,9 +8,6 @@ EXE_INC = \
     -I$(BOOST_LIBRARY_PATH)/include \
     -I$(EIGEN_LIBRARY_PATH) \
     -I$(RAPIDXML_LIBRARY_PATH) \
-    -I$(SUNDIALS_PATH)/include \
-    -I$(MKL_INCLUDE) \
-    -I$(ISAT_INCLUDE) \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/fvOptions/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
@@ -22,20 +16,10 @@ EXE_INC = \
 EXE_LIBS = \
     -L$(FOAM_USER_LIBBIN) \
     -L$(BOOST_LIBRARY_PATH)/lib \
-    $(MKL_LIBS) \
     -lfiniteVolume \
     -lmeshTools \
     -lsampling \
-    $(SUNDIALS_LIBS) \
-    $(MEBDF_LIBS) \
-    $(RADAU_LIBS) \
-    $(DASPK_LIBS) \
-    $(ODEPACK_LIBS) \
-    $(DVODE_LIBS)     \
-    $(LINPACK_LIBS) \
-    $(ISAT_LIBS) \
     -lgfortran \
-    $(MKL_LIBS) \
     -lboost_date_time \
     -lboost_filesystem \
     -lboost_system \
