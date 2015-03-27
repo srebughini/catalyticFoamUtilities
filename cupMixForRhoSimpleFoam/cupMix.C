@@ -20,18 +20,18 @@ int main(int argc, char *argv[])
 
     Info<< "\nStarting FAKE time loop\n" << endl;
 
-    while (simple.loop())
-    {
-        Info<< "Time = " << runTime.timeName() << nl << endl;
-
-        runTime.write();
-
-        Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
-            << "  ClockTime = " << runTime.elapsedClockTime() << " s"
-            << nl << endl;
-    }
-
-    Info<< "End\n" << endl;
+	bool cupMixExit = true;
+	while (runTime.run())
+	{
+		if (cupMixExit != true)
+		{
+			Info << "ERROR: please set writeNow in controlDict options" << endl;
+			exit(-1);
+		}
+		runTime++;
+		runTime.write();
+		cupMixExit = false;
+	}
 
     return 0;
 }

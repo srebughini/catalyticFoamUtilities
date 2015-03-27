@@ -140,6 +140,23 @@ int main(int argc, char *argv[])
 	fmassFlux << "OUT pressure      = " << OutletPressure << "	[m2/s2]" << endl;
 	fmassFlux << "Mean pressure      = " <<  pMean << "	[m2/s2]" << endl;
 	fmassFlux.close();
+	
+	
+	Info<< "\nStarting FAKE time loop\n" << endl;
+
+	bool cupMixExit = true;
+	while (runTime.run())
+	{
+		if (cupMixExit != true)
+		{
+			Info << "ERROR: please set writeNow in controlDict options" << endl;
+			exit(-1);
+		}
+		runTime++;
+		runTime.write();
+		cupMixExit = false;
+	}
+
 	return 0;
 	
 }
