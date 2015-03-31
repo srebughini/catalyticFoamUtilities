@@ -141,7 +141,7 @@ cd ..
 rm -rf postProcessing
 
 #Post processor, depens on type of simulation
-postProcessorPressureDrops
+postProcessorCupMixForRhoSimpleFoam
 
 folderToRemove=$(echo "$time + 1" | bc -l)
 rm -rf $folderToRemove
@@ -154,8 +154,7 @@ valueOutlet=$(sed -n "4p" postProcessing/outlet/$time/faceSource.dat | awk '{pri
 
 echo "Pressure drops estimated somewhere in the reactors" >> pressureDrops.txt
 echo " " >> pressureDrops.txt
-echo "Inlet          [m2/s2]:  $valueInlet      at $inlet  [m]"  >> pressureDrops.txt
-echo "Outlet         [m2/s2]:  $valueOutlet     at $outlet [m]" >> pressureDrops.txt
+echo "Inlet          [Pa]:  $valueInlet       at     $inlet [m]"  >> pressureDrops.txt
+echo "Outlet         [Pa]:  $valueOutlet      at     $outlet [m]" >> pressureDrops.txt
 
 rm -rf postProcessing
-
