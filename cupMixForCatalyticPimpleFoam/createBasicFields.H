@@ -41,3 +41,19 @@ volScalarField T
     ),
     mesh
 );
+
+//- Allocating memory for total concentration [kmol/m3]
+Info<< "Creating field cTot\n" << endl;
+volScalarField cTot
+(
+    IOobject
+    (
+        "gas::cTot",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionSet(0, -3, 0, 0, 1)
+);

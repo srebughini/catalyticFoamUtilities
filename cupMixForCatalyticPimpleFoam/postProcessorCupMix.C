@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 	#endif
 
 	#include "finalSetupOperations.H"
-
+	#include "properties.H"
 	#include "initContinuityErrs.H"
 	#include "readTimeControls.H"
 	#include "compressibleCourantNo.H"
