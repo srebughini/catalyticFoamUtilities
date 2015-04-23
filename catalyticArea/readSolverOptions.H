@@ -11,11 +11,15 @@ IOdictionary solverOptions
 	)
 );
 
-// List of inlet boundaries
-List<word>  listInletBoundaries(solverOptions.lookup("inletBoundaries"));
-
-// List of outlet boundaries
-List<word>  listOutletBoundaries(solverOptions.lookup("outletBoundaries"));
-
-// List of catalytic boundaries
-List<word>  listCatalyticBoundaries(solverOptions.lookup("catalyticBoundaries"));
+List<word>  listInletBoundaries;
+List<word>  listOutletBoundaries;
+List<word>  listCatalyticBoundaries;
+const dictionary& postProcessing = solverOptions.subDict("PostProcessing");
+{
+	// List of inlet boundaries
+	listInletBoundaries = List<word>(postProcessing.lookup("inletBoundaries"));
+	// List of outlet boundaries
+	listOutletBoundaries = List<word>(postProcessing.lookup("outletBoundaries"));
+	// List of catalytic boundaries
+	listCatalyticBoundaries = List<word>(postProcessing.lookup("catalyticBoundaries"));
+}
