@@ -39,14 +39,21 @@ for (int index=0;index<thermodynamicsMapXML->NumberOfSpecies();index++)
 	std::cout << Y[index].name() << "\t" << DmixMean[index+1] << std::endl;
 }
 std::cout << "---------------------------------------------------" << std::endl;
-Info << "	Atomic balance error [-]" << endl;
+Info << "	Atomic balance error [%]" << endl;
 for (int index=0;index<elementNames_.size();index++)
 {
 	if ( ElementInlet[index+1] > 0 )
 		std::cout << elementNames_[index] << "\t" << (ElementInlet[index+1] - ElementOutlet[index+1])*100/ElementInlet[index+1]  << "\t[%]" << std::endl;
 }
 std::cout << "---------------------------------------------------" << std::endl;
-
+Info << "IN temperature         = " << InletTemperature << "	[K]" << endl;
+Info << "OUT temperature        = " << OutletTemperature << "	[K]" << endl;
+Info << "Adiabatic temperautre  = " << OutletTemperature - InletTemperature << "	[K]" << endl;
+std::cout << "---------------------------------------------------" << std::endl;
+Info << "Enthalpy flux IN:        " << (EnthalpyFluxIn) << "	[W/m2]" << endl;
+Info << "Enthalpy flux OUT:       " << (EnthalpyFluxOut) << "	[W/m2]" << endl;
+Info << "ERROR on ENERGY BALANCE: " << ((EnthalpyFluxIn - EnthalpyFluxOut)*100./EnthalpyFluxIn) << "	[%]" << endl;
+std::cout << "---------------------------------------------------" << std::endl;
 // Write on file
 std::ofstream fmassFlux;
 std::string fileName = "postProcessorMultiREGION_"+runTime.timeName()+".txt";
@@ -98,4 +105,13 @@ for (int index=0;index<elementNames_.size();index++)
 	if ( ElementInlet[index+1] > 0 )
 		fmassFlux << elementNames_[index] << "\t" << (ElementInlet[index+1] - ElementOutlet[index+1])*100/ElementInlet[index+1]  << "\t[%]" << std::endl;
 }
+fmassFlux << " " << std::endl;
+fmassFlux << "IN temperature         = " << InletTemperature << "	[K]" << std::endl;
+fmassFlux << "OUT temperature        = " << OutletTemperature << "	[K]" << std::endl;
+fmassFlux << "Adiabatic temperautre  = " << OutletTemperature - InletTemperature << "	[K]" << std::endl;
+fmassFlux << " " << std::endl;
+fmassFlux << "Enthalpy flux IN:        " << (EnthalpyFluxIn) << "	[W/m2]" << std::endl;
+fmassFlux << "Enthalpy flux OUT:       " << (EnthalpyFluxOut) << "	[W/m2]" << std::endl;
+fmassFlux << "ERROR on ENERGY BALANCE: " << ((EnthalpyFluxIn - EnthalpyFluxOut)*100./EnthalpyFluxIn) << "	[%]" << std::endl;
+fmassFlux << " " << std::endl;
 fmassFlux.close();
