@@ -7,31 +7,27 @@
 // Reactor utilities
 #include "reactors/utilities/Utilities"
 
-// ODE solvers
-#include "math/multivalue-ode-solvers/MultiValueSolver"
-#include "ode/ODE_Parameters.h"
-
+// OpenFOAM
 #include "fvCFD.H"
-#include "psiCombustionModel.H"
 #include "multivariateScheme.H"
-#include "RASModel.H"
-#include "simpleControl.H"
-#include "radiationModel.H"
+#include "pimpleControl.H"
 #include "fvIOoptionList.H"
 #include "userDefinedFunctions.H"
+
 int main(int argc, char *argv[])
 {
 	#include "setRootCase.H"
 	#include "createTime.H"
 	#include "createMesh.H"
 	#include "readGravitationalAcceleration.H"
-	#include "createFields.H"
-	#include "createOpenSMOKEFields.H"
-	#include "createFvOptions.H"
-	#include "createRadiationModel.H"
-	#include "initContinuityErrs.H"
-	#include "properties.H"
+	#include "createBasicFields.H"
 	#include "readSolverOptions.H"
+	#include "createAdditionalFields.H"
+	#include "createFvOptions.H"
+	#include "memoryAllocation.H"
+	#include "properties.H"
+	#include "finalSetupOperations.H"
+	#include "fluxes.H"
 
 	#include "evaluatingArea.H"
 	#include "evaluatingConversion.H"
@@ -39,8 +35,6 @@ int main(int argc, char *argv[])
 	#include "evaluatingPressureDrops.H"
 	#include "evaluatingTransportProperties.H"
 	#include "write.H"
-    return 0;
+
+	return 0;
 }
-
-
-// ************************************************************************* //

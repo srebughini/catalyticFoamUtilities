@@ -8,7 +8,7 @@ muMean = MeanInternalField(mesh, mu);
 OpenSMOKE::OpenSMOKEVectorDouble DmixMean(thermodynamicsMapXML->NumberOfSpecies());
 for (int index=0;index<thermodynamicsMapXML->NumberOfSpecies();index++)
 {
-	DmixMean[index+1]=MeanInternalField(mesh, Dmix_[index]);
+	DmixMean[index+1]=MeanInternalField(mesh, Dmix[index]);
 }
 //- Calculate mean Pressure
 scalar pMean  = 0.;
