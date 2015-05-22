@@ -1,0 +1,4 @@
+LOCAL_OBJECTS = \
+postProcessorCupMix.o\
+compressibleCourantNo.o\
+solidRegionDiffNo.o

@@ -1,36 +1,21 @@
-// OpenSMOKE
-#include "OpenSMOKE_Definitions.h"
-#include <string>
-#include <iostream>
-#include <numeric>
-#include <Eigen/Dense>
+// OpenSMOKE++ Definitions
+#include "OpenSMOKEpp"
 
-// Base classes
-#include "thermo/ThermoPolicy_CHEMKIN.h"
-#include "kinetics/ReactionPolicy_CHEMKIN.h"
-#include "math/PhysicalConstants.h"
-#include "math/OpenSMOKEUtilities.h"
+// CHEMKIN maps
+#include "maps/Maps_CHEMKIN"
 
-// Maps
-#include "maps/ThermodynamicsMap_CHEMKIN.h"
-#include "maps/KineticsMap_CHEMKIN.h"
-#include "maps/TransportPropertiesMap_CHEMKIN.h"
+// Reactor utilities
+#include "reactors/utilities/Utilities"
 
-// Surface
-#include "maps/ThermodynamicsMap_Surface_CHEMKIN.h"
-#include "maps/KineticsMap_Surface_CHEMKIN.h"
-
-// ODE system
-#include <stdio.h>
-
+// OpenFOAM
 #include "fvCFD.H"
-#include "psiCombustionModel.H"
 #include "multivariateScheme.H"
 #include "simpleControl.H"
 #include "fvIOoptionList.H"
 
-// Utilities
-#include "Utilities.H"
+// Additional classes
+#include "lumped.H"
+#include "userDefinedFunctions.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -40,27 +25,39 @@ int main(int argc, char *argv[])
     #include "createTime.H"
     #include "createMesh.H"
     #include "readGravitationalAcceleration.H"
+    #include "readSolverOptions.H"
 
     simpleControl simple(mesh);
 
-    #include "createFields.H"
-    #include "createOpenSMOKEFields.H"
-    #include "createExtraFields.H"
+    #include "createBasicFields.H"
+    #include "createAdditionalFields.H"
     #include "createFvOptions.H"
-    #include "initContinuityErrs.H"
+    #include "properties.H"
+    #include "finalSetupOperations.H"
     
+    #include "initContinuityErrs.H"
+
+    dimensionedScalar initialMass = fvc::domainIntegrate(rho);
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+    Info<< "\nStarting time loop\n" << endl;
+
+
+	bool cupMixExit = true;  
     while (simple.loop())
     {
-        Info<< "Time = " << runTime.timeName() << nl << endl;
-        #include "properties.H"
-        runTime++;
-        runTime.write();
-
-        Info<< "Run fake time step!!" << endl;
+		if (cupMixExit != true)
+		{
+			Info << "ERROR: please set writeNow in controlDict options" << endl;
+			exit(-1);
+		}
+		runTime.write();
+		cupMixExit = false;
     }
-
+    
     Info<< "End\n" << endl;
-
+    
     return 0;
 }
 
