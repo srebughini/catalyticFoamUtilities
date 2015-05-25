@@ -22,7 +22,7 @@ L=$(echo "$Lmax - $Lmin" | bc -l)
 dz=$(echo "$L/($N-1)" | bc -l)
 
 #Modified for heterogenous or homogeneous
-SpecieList=("C3H8" "CH4" "CO" "CO2" "O2" "H2" "H2O" "C3H6" "C2H4" "C2H6")
+SpecieList=("CO" "CO2" "O2")
 NS=$(echo "${#SpecieList[@]}" | bc -l)
 
 #Source OpenFOAM 2.3.1
@@ -49,20 +49,19 @@ do
 	echo "startFrom       latestTime;" >> controlDict
 	echo "startTime       0;" >> controlDict
 	echo "stopAt	writeNow;" >> controlDict
-	echo "endTime         10.;" >> controlDict
-	echo "deltaT          0.1;" >> controlDict
+	echo "endTime         100000.;" >> controlDict
+	echo "deltaT          1;" >> controlDict
 	echo "writeControl    adjustableRunTime;" >> controlDict
 	echo "writeInterval   1;" >> controlDict
 	echo "purgeWrite      0;" >> controlDict
-	echo "writeFormat     ascii;" >> controlDict
+	echo "writeFormat     binary;" >> controlDict
 	echo "writePrecision  18;" >> controlDict
-	echo "writeCompression uncompressed;" >> controlDict
+	echo "writeCompression compressed;" >> controlDict
 	echo "timeFormat      general;" >> controlDict
 	echo "timePrecision   6;" >> controlDict
 	echo "runTimeModifiable yes;" >> controlDict
-	echo "adjustTimeStep  yes;" >> controlDict
-	echo "maxCo           0.1;" >> controlDict
-	echo "libs (\"libCatalyticWall.so\" \"libgroovyBC.so\" \"libsimpleSwakFunctionObjects.so\");" >> controlDict
+	echo "adjustTimeStep  no;" >> controlDict
+	echo "libs (\"libgroovyBC.so\" \"libsimpleSwakFunctionObjects.so\");" >> controlDict
 	echo "functions" >> controlDict
 	echo "{" >> controlDict
 
@@ -126,48 +125,46 @@ do
 	echo "// ************************************************************************* //" >> controlDict
 	cd ..
 	rm -rf postProcessing
-	postProcessorCupMixForCatalyticPimpleFoam
-	folderToRemove=$(ls -t | sed -n "1p")
+	postProcessorCupMixForCatalyticSimpleFoam
+	folderToRemove=$(echo "$time + 1" | bc -l)
 	rm -rf $folderToRemove
 
  
 	#Extract solution
-	cd postProcessing
 	if [ "$k" -eq "$NS" ]
 	then
-		rm -f ../rho.txt
-		touch ../rho.txt
+		rm -f rho.txt
+		touch rho.txt
 		for i in $(seq 1 $N)
 		do
 			folderName=$swakFolder$i
 			if [ "$i" -eq 1 ]
 			then
-				echo "#cTot" >> ../rho.txt
-				value=$(sed -n "2p" $swakFolder$i/$time/z$i | awk '{print $2}')
-				echo "$value" >> ../rho.txt
+				echo "#cTot" >> rho.txt
+				value=$(sed -n "2p" postProcessing/$swakFolder$i/$time/z$i | awk '{print $2}')
+				echo "$value" >> rho.txt
 			else
-				value=$(sed -n "2p" $swakFolder$i/$time/z$i | awk '{print $2}')
-				echo "$value" >> ../rho.txt
+				value=$(sed -n "2p" postProcessing/$swakFolder$i/$time/z$i | awk '{print $2}')
+				echo "$value" >> rho.txt
 			fi
 		done
 	else
-		rm -f ../${SpecieList[k]}.txt
-		touch ../${SpecieList[k]}.txt
+		rm -f ${SpecieList[k]}.txt
+		touch ${SpecieList[k]}.txt
 		for i in $(seq 1 $N)
 		do
 			folderName=$swakFolder$i
 			if [ "$i" -eq 1 ]
 			then
-				echo "#${SpecieList[k]}" >> ../${SpecieList[k]}.txt
-				value=$(sed -n "2p" $swakFolder$i/$time/z$i | awk '{print $2}')
-				echo "$value" >> ../${SpecieList[k]}.txt
+				echo "#${SpecieList[k]}" >> ${SpecieList[k]}.txt
+				value=$(sed -n "2p" postProcessing/$swakFolder$i/$time/z$i | awk '{print $2}')
+				echo "$value" >> ${SpecieList[k]}.txt
 			else
-				value=$(sed -n "2p" $swakFolder$i/$time/z$i | awk '{print $2}')
-				echo "$value" >> ../${SpecieList[k]}.txt
+				value=$(sed -n "2p" postProcessing/$swakFolder$i/$time/z$i | awk '{print $2}')
+				echo "$value" >> ${SpecieList[k]}.txt
 			fi
 		done
 	fi
-	cd ..
 done
 
 #Create final file
