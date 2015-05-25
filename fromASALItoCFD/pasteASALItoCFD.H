@@ -68,14 +68,20 @@ forAll(fluidRegions, j)
 						{
 							thetaFluid[j*surfaceThermodynamicsMapXML->number_of_site_species()+k].boundaryField()[iPatch][iFace] = SITEasali[i][k];
 						}
-						
 						cataliticCounter++;
 					}
 				}
 
 				if ( energyFluid[j] == true )
 				{
-					T.internalField()[celli] = TBULKasali[i];
+					if (isNeighbourCell[celli] > 0)
+					{
+						T.internalField()[celli] = TWALLasali[i];
+					}
+					else
+					{
+						T.internalField()[celli] = TBULKasali[i];
+					}
 				}
 
 				for (unsigned int k=0;k<3;k++)
@@ -185,7 +191,7 @@ forAll(solidRegions, j)
 						thetaSolid[j*surfaceThermodynamicsMapXML->number_of_site_species()+k].internalField()[celli] = SITEasali[i][k];
 					}
 				}
-				
+
 				if ( energySolid[j] == true )
 				{
 					T.internalField()[celli] = TWALLasali[i];
