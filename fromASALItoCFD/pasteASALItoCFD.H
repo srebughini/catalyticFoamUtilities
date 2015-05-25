@@ -8,8 +8,9 @@ forAll(fluidRegions, j)
 	OpenSMOKE::OpenSMOKEVectorDouble massFractions(thermodynamicsMapXML->NumberOfSpecies());
     OpenSMOKE::OpenSMOKEVectorDouble moleFractions(thermodynamicsMapXML->NumberOfSpecies());
 
-	const volVectorField& centers = mesh.C();
-	unsigned int          NS      = centers.size();
+	const volVectorField& centers          = mesh.C();
+	unsigned int          NS               = centers.size();
+	         int          cataliticCounter = 0;
 
 	std::vector<double> dzVector(Nasali);
 	double min;
@@ -56,7 +57,22 @@ forAll(fluidRegions, j)
 						}
 					}
 				}
-				
+
+				if ( siteFluid[j] == true )
+				{
+					if (isNeighbourCell[celli] > 0)
+					{
+						const unsigned int iPatch = catalyticReactors[cataliticCounter].patchIndex[1];
+						const unsigned int iFace  = catalyticReactors[cataliticCounter].faceIndex[1];
+						for(unsigned int k=0;k<surfaceThermodynamicsMapXML->number_of_site_species();k++)
+						{
+							thetaFluid[j*surfaceThermodynamicsMapXML->number_of_site_species()+k].boundaryField()[iPatch][iFace] = SITEasali[i][k];
+						}
+						
+						cataliticCounter++;
+					}
+				}
+
 				if ( energyFluid[j] == true )
 				{
 					T.internalField()[celli] = TBULKasali[i];
@@ -66,7 +82,7 @@ forAll(fluidRegions, j)
 				{
 					if ( k == directionIndex)
 					{
-						U.internalField()[celli][k] = Vasali[i];
+						U.internalField()[celli][k] = Vasali[i]*2.;
 					}
 					else
 					{
@@ -77,6 +93,7 @@ forAll(fluidRegions, j)
 				break;
 			}
 		}
+
 	}
 
 	if ( energyFluid[j] == true )
@@ -93,6 +110,16 @@ forAll(fluidRegions, j)
 			YFluid[j*thermodynamicsMapXML->NumberOfSpecies()+i].write();
 		}
 	}
+
+	if ( siteFluid[j] == true )
+	{
+		for(unsigned int i=0;i<surfaceThermodynamicsMapXML->number_of_site_species();i++)
+		{
+			thetaFluid[j*surfaceThermodynamicsMapXML->number_of_site_species()+i].write();
+		}
+	}
+
+
 	Info << fluidRegions[j].name() << nl << endl;
 }
 
@@ -152,6 +179,11 @@ forAll(solidRegions, j)
 							YSolid[j*thermodynamicsMapXML->NumberOfSpecies()+k].internalField()[celli] = massFractions[k+1];
 						}
 					}
+
+					for(unsigned int k=0;k<surfaceThermodynamicsMapXML->number_of_site_species();k++)
+					{
+						thetaSolid[j*surfaceThermodynamicsMapXML->number_of_site_species()+k].internalField()[celli] = SITEasali[i][k];
+					}
 				}
 				
 				if ( energySolid[j] == true )
@@ -174,6 +206,11 @@ forAll(solidRegions, j)
 		for(unsigned int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
 		{
 			YSolid[j*thermodynamicsMapXML->NumberOfSpecies()+i].write();
+		}
+
+		for(unsigned int i=0;i<surfaceThermodynamicsMapXML->number_of_site_species();i++)
+		{
+			thetaSolid[j*surfaceThermodynamicsMapXML->number_of_site_species()+i].write();
 		}
 	}
 

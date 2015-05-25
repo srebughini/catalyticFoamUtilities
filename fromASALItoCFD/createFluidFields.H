@@ -112,7 +112,11 @@ forAll (fluidRegions,j)
 				);
 			}
 		}
+	}
 
+
+	if ( siteFluid[j] == true )
+	{
 		//- Reading adsorbed species
 		for(int i=0;i<surfaceThermodynamicsMapXML->number_of_site_species();i++)
 		{

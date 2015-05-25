@@ -33,3 +33,9 @@ if ( specieFluid.size() != fluidRegions.size() )
 	Info << nl << "ERROR in solverOptions/FromASALItoCFD/specieInFluid --> number of fluid regions: " << fluidRegions.size() << endl;
 	abort();
 }
+
+if ( siteFluid.size() != fluidRegions.size() )
+{
+	Info << nl << "ERROR in solverOptions/FromASALItoCFD/siteInFluid --> number of fluid regions: " << fluidRegions.size() << endl;
+	abort();
+}

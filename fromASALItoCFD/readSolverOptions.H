@@ -70,6 +70,7 @@ List<bool>   energySolid;
 List<bool>   energyFluid;
 List<bool>   specieSolid;
 List<bool>   specieFluid;
+List<bool>   siteFluid;
 
 const dictionary& preProcessingDictionary = solverOptions.subDict("FromASALItoCFD");
 {
@@ -99,12 +100,28 @@ const dictionary& preProcessingDictionary = solverOptions.subDict("FromASALItoCF
 	energyFluid = List<bool>(preProcessingDictionary.lookup("energyInFluid"));
 	specieSolid = List<bool>(preProcessingDictionary.lookup("specieInSolid"));
 	specieFluid = List<bool>(preProcessingDictionary.lookup("specieInFluid"));
+	siteFluid   = List<bool>(preProcessingDictionary.lookup("siteInFluid"));
 }
 
+List<word>    patchCatalytic;
 label         catalystIndex;
+bool          catalyst = false;
 
 const dictionary& catalystDictionary = solverOptions.subDict("Catalyst");
 {
+    patchCatalytic = List<word>(catalystDictionary.lookup("catalyticPatchName"));
+
+    if ( patchCatalytic.size() == 0 )
+    {
+        Info << "Warning catalytic patches not detected..." << endl;
+        Info << "Press Enter to continue..." << endl;
+        getchar();
+    }
+    else
+    {
+        catalyst = true;
+    }
+
     word catalystMaterial(catalystDictionary.lookup("catalystMaterial"));
     catalystIndex = surfaceThermodynamicsMapXML->IndexOfSpecies(catalystMaterial)-thermodynamicsMapXML->NumberOfSpecies()-1;
 }

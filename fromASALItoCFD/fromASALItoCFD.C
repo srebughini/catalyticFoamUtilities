@@ -15,6 +15,8 @@
 
 #include "reactors/utilities/Utilities"
 
+#include "catalyticReactorClass.H"
+
 #include "fvCFD.H"
 #include "multivariateScheme.H"
 #include "pimpleControl.H"
@@ -38,6 +40,7 @@ int main(int argc, char **argv)
 
 	#include "createFluidFields.H"
 	#include "createSolidFields.H"
+    #include "catalystTopology.H"
 
 	#include "pasteASALItoCFD.H"
 
