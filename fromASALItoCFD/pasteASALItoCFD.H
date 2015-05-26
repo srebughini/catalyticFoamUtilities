@@ -36,24 +36,52 @@ forAll(fluidRegions, j)
 				{
 					if ( ResultsAsali == "mass" )
 					{
-						for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
+						if (isNeighbourCell[celli] > 0)
 						{
-							YFluid[j*thermodynamicsMapXML->NumberOfSpecies()+k].internalField()[celli] = omegaBULKasali[i][k];
+							for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
+							{
+								YFluid[j*thermodynamicsMapXML->NumberOfSpecies()+k].internalField()[celli] = omegaWALLasali[i][k];
+							}
+						}
+						else
+						{
+							for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
+							{
+								YFluid[j*thermodynamicsMapXML->NumberOfSpecies()+k].internalField()[celli] = omegaBULKasali[i][k];
+							}
 						}
 					}
 					else if ( ResultsAsali == "mole" )
 					{
-						double dummy;
-						for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
+						if (isNeighbourCell[celli] > 0)
 						{
-							moleFractions[k+1] = omegaBULKasali[i][k];
+							double dummy;
+							for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
+							{
+								moleFractions[k+1] = omegaWALLasali[i][k];
+							}
+
+							thermodynamicsMapXML->MassFractions_From_MoleFractions(massFractions,dummy,moleFractions);
+
+							for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
+							{
+								YFluid[j*thermodynamicsMapXML->NumberOfSpecies()+k].internalField()[celli] = massFractions[k+1];
+							}
 						}
-
-						thermodynamicsMapXML->MassFractions_From_MoleFractions(massFractions,dummy,moleFractions);
-
-						for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
+						else
 						{
-							YFluid[j*thermodynamicsMapXML->NumberOfSpecies()+k].internalField()[celli] = massFractions[k+1];
+							double dummy;
+							for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
+							{
+								moleFractions[k+1] = omegaBULKasali[i][k];
+							}
+
+							thermodynamicsMapXML->MassFractions_From_MoleFractions(massFractions,dummy,moleFractions);
+
+							for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
+							{
+								YFluid[j*thermodynamicsMapXML->NumberOfSpecies()+k].internalField()[celli] = massFractions[k+1];
+							}
 						}
 					}
 				}
@@ -68,7 +96,6 @@ forAll(fluidRegions, j)
 						{
 							thetaFluid[j*surfaceThermodynamicsMapXML->number_of_site_species()+k].boundaryField()[iPatch][iFace] = SITEasali[i][k];
 						}
-						cataliticCounter++;
 					}
 				}
 
@@ -86,18 +113,31 @@ forAll(fluidRegions, j)
 
 				for (unsigned int k=0;k<3;k++)
 				{
-					if ( k == directionIndex)
+					if (isNeighbourCell[celli] > 0)
 					{
-						U.internalField()[celli][k] = Vasali[i]*2.;
+						U.internalField()[celli][k] = 0.;
 					}
 					else
 					{
-						U.internalField()[celli][k] = 0.;
+						if ( k == directionIndex)
+						{
+							U.internalField()[celli][k] = Vasali[i];
+						}
+						else
+						{
+							U.internalField()[celli][k] = 0.;
+						}
 					}
 				}
 
 				break;
 			}
+		}
+		
+		
+		if (isNeighbourCell[celli] > 0)
+		{
+			cataliticCounter++;
 		}
 
 	}
@@ -167,7 +207,7 @@ forAll(solidRegions, j)
 					{
 						for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
 						{
-							YSolid[j*thermodynamicsMapXML->NumberOfSpecies()+k].internalField()[celli] = omegaBULKasali[i][k];
+							YSolid[j*thermodynamicsMapXML->NumberOfSpecies()+k].internalField()[celli] = omegaWALLasali[i][k];
 						}
 					}
 					else if ( ResultsAsali == "mole" )
@@ -175,7 +215,7 @@ forAll(solidRegions, j)
 						double dummy;
 						for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
 						{
-							moleFractions[k+1] = omegaBULKasali[i][k];
+							moleFractions[k+1] = omegaWALLasali[i][k];
 						}
 
 						thermodynamicsMapXML->MassFractions_From_MoleFractions(massFractions,dummy,moleFractions);
