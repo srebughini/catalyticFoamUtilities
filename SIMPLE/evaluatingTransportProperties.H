@@ -8,7 +8,7 @@ muMean = MeanInternalField(mesh, mu);
 OpenSMOKE::OpenSMOKEVectorDouble DmixMean(thermodynamicsMapXML->NumberOfSpecies());
 for (int index=0;index<thermodynamicsMapXML->NumberOfSpecies();index++)
 {
-	DmixMean[index+1]=MeanInternalField(mesh, Dmix[index]);
+    DmixMean[index+1]=MeanInternalField(mesh, Dmix[index]);
 }
 //- Calculate mean Pressure
 scalar pMean  = 0.;
@@ -17,11 +17,11 @@ pMean = MeanInternalField(mesh, p);
 double Uinlet = 0.;
 for (int j=0;j<listInletBoundaries.size();j++)
 {
-	label patchID = mesh.boundaryMesh().findPatchID(listInletBoundaries[j]);
-	forAll(Y[0].boundaryField()[patchID] , facei)
-	{
-		Uinlet = mag(U.boundaryField()[patchID][facei]);
-	}
+    label patchID = mesh.boundaryMesh().findPatchID(listInletBoundaries[j]);
+    forAll(Y[0].boundaryField()[patchID] , facei)
+    {
+        Uinlet = mag(U.boundaryField()[patchID][facei]);
+    }
 }
 //- Calculate mean velocity
 scalar Umean  = 0.;
