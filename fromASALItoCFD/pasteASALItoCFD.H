@@ -113,28 +113,20 @@ forAll(fluidRegions, j)
 
 				for (unsigned int k=0;k<3;k++)
 				{
-					if (isNeighbourCell[celli] > 0)
+					if ( k == directionIndex)
 					{
-						U.internalField()[celli][k] = 0.;
+						U.internalField()[celli][k] = Vasali[i];
 					}
 					else
 					{
-						if ( k == directionIndex)
-						{
-							U.internalField()[celli][k] = Vasali[i];
-						}
-						else
-						{
-							U.internalField()[celli][k] = 0.;
-						}
+						U.internalField()[celli][k] = 0.;
 					}
 				}
 
 				break;
 			}
 		}
-		
-		
+
 		if (isNeighbourCell[celli] > 0)
 		{
 			cataliticCounter++;

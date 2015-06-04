@@ -99,3 +99,10 @@ for (int index=0;index<elementNames_.size();index++)
         fmassFlux << elementNames_[index] << "\t" << (ElementInlet[index+1] - ElementOutlet[index+1])*100/ElementInlet[index+1]  << "\t[%]" << std::endl;
 }
 fmassFlux.close();
+
+
+
+for (unsigned int i=0;i<elementNames_.size();i++)
+{
+    element_[i].write();
+}
