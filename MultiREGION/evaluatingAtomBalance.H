@@ -5,9 +5,9 @@ for (int index=0;index<elementNames_.size();index++)
 {
 	scalar speciesMassFlowInlet  = 0.;
 	scalar speciesMassFlowOutlet = 0.;
-	for (int j=0;j<listInletBoundaries.size();j++)
+	for (int k=0;k<listInletBoundaries.size();k++)
 	{
-		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listInletBoundaries[j]);
+		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listInletBoundaries[k]);
 
 		forAll(element_[0].boundaryField()[patchID] , facei)
 		{
@@ -15,10 +15,10 @@ for (int index=0;index<elementNames_.size();index++)
 			speciesMassFlowInlet += area*element_[index].boundaryField()[patchID][facei];
 		}
 	}
-	for (int j=0;j<listOutletBoundaries.size();j++)
+	for (int k=0;k<listOutletBoundaries.size();k++)
 	{
 
-		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listOutletBoundaries[j]);
+		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listOutletBoundaries[k]);
 		forAll(element_[0].boundaryField()[patchID] , facei)
 		{
 			double area = fluidRegions[j].magSf().boundaryField()[patchID][facei];

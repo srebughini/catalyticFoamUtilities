@@ -5,18 +5,18 @@ double InletTemperature  = 0.;
 double OutletTemperature = 0.;
 {
 	//- Evaluating temperature
-	for (int j=0;j<listInletBoundaries.size();j++)
+	for (int k=0;k<listInletBoundaries.size();k++)
 	{
-		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listInletBoundaries[j]);
+		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listInletBoundaries[k]);
 		forAll(Y[0].boundaryField()[patchID] , facei)
 		{
 			double area = fluidRegions[j].magSf().boundaryField()[patchID][facei];
 			InletTemperature += area*T.boundaryField()[patchID][facei];
 		}
 	}
-	for (int j=0;j<listOutletBoundaries.size();j++)
+	for (int k=0;k<listOutletBoundaries.size();k++)
 	{
-		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listOutletBoundaries[j]);
+		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listOutletBoundaries[k]);
 		forAll(Y[0].boundaryField()[patchID] , facei)
 		{
 			double area = fluidRegions[j].magSf().boundaryField()[patchID][facei];
@@ -32,16 +32,16 @@ double OutletTemperature = 0.;
 	{
 		scalar speciesMassFlowInlet  = 0.;
 		scalar speciesMassFlowOutlet = 0.;
-		for (int j=0;j<listInletBoundaries.size();j++)
+		for (int k=0;k<listInletBoundaries.size();k++)
 		{
-			double Num = calculateSpeciesFlowRate(fluidRegions[j],phi, Y[index], listInletBoundaries[j]);
-			double Den = calculateMassFlowRate(fluidRegions[j],phi,listInletBoundaries[j]);
+			double Num = calculateSpeciesFlowRate(fluidRegions[j],phi, Y[index], listInletBoundaries[k]);
+			double Den = calculateMassFlowRate(fluidRegions[j],phi,listInletBoundaries[k]);
 			speciesMassFlowInlet += Num/Den;
 		}
-		for (int j=0;j<listOutletBoundaries.size();j++)
+		for (int k=0;k<listOutletBoundaries.size();k++)
 		{
-			double Num = calculateSpeciesFlowRate(fluidRegions[j],phi, Y[index], listOutletBoundaries[j]);
-			double Den = calculateMassFlowRate(fluidRegions[j],phi,listOutletBoundaries[j]);
+			double Num = calculateSpeciesFlowRate(fluidRegions[j],phi, Y[index], listOutletBoundaries[k]);
+			double Den = calculateMassFlowRate(fluidRegions[j],phi,listOutletBoundaries[k]);
 			speciesMassFlowOutlet += Num/Den;
 		}
 		ConversionVector[index+1] = (speciesMassFlowInlet-speciesMassFlowOutlet)*100./max(1.e-64, speciesMassFlowInlet);
@@ -54,9 +54,9 @@ double OutletTemperature = 0.;
 			thermodynamicsMapXML->SetTemperature(InletTemperature);
 			thermodynamicsMapXML->hMolar_Species(h);
 			double G = MassFractionInlet.SumElements();
-			for (unsigned int j=1;j<=thermodynamicsMapXML->NumberOfSpecies();j++)
+			for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
 			{
-				EnthalpyFluxIn += MassFractionInlet[j]*h[j]*G/thermodynamicsMapXML->MW()[j];
+				EnthalpyFluxIn += MassFractionInlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
 			}
 		}
 
@@ -66,9 +66,9 @@ double OutletTemperature = 0.;
 			thermodynamicsMapXML->SetTemperature(OutletTemperature);
 			thermodynamicsMapXML->hMolar_Species(h);
 			double G = MassFractionOutlet.SumElements();
-			for (unsigned int j=1;j<=thermodynamicsMapXML->NumberOfSpecies();j++)
+			for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
 			{
-				EnthalpyFluxOut += MassFractionOutlet[j]*h[j]*G/thermodynamicsMapXML->MW()[j];
+				EnthalpyFluxOut += MassFractionOutlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
 			}
 		}
 

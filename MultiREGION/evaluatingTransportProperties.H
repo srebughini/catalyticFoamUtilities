@@ -15,9 +15,9 @@ scalar pMean  = 0.;
 pMean = MeanInternalField(fluidRegions[j], p);
 //- Print inlet velocity
 double Uinlet = 0.;
-for (int j=0;j<listInletBoundaries.size();j++)
+for (int k=0;k<listInletBoundaries.size();k++)
 {
-	label patchID = fluidRegions[j].boundaryMesh().findPatchID(listInletBoundaries[j]);
+	label patchID = fluidRegions[j].boundaryMesh().findPatchID(listInletBoundaries[k]);
 	forAll(Y[0].boundaryField()[patchID] , facei)
 	{
 		Uinlet = mag(U.boundaryField()[patchID][facei]);

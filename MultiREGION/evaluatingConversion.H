@@ -6,16 +6,16 @@ for (int index=0;index<thermodynamicsMapXML->NumberOfSpecies();index++)
 {
 	scalar speciesMassFlowInlet  = 0.;
 	scalar speciesMassFlowOutlet = 0.;
-	for (int j=0;j<listInletBoundaries.size();j++)
+	for (int k=0;k<listInletBoundaries.size();k++)
 	{
-		double Num = calculateSpeciesFlowRate(fluidRegions[j],phi, Y[index], listInletBoundaries[j]);
-		double Den = calculateMassFlowRate(fluidRegions[j],phi,listInletBoundaries[j]);
+		double Num = calculateSpeciesFlowRate(fluidRegions[j],phi, Y[index], listInletBoundaries[k]);
+		double Den = calculateMassFlowRate(fluidRegions[j],phi,listInletBoundaries[k]);
 		speciesMassFlowInlet += Num/Den;
 	}
-	for (int j=0;j<listOutletBoundaries.size();j++)
+	for (int k=0;k<listOutletBoundaries.size();k++)
 	{
-		double Num = calculateSpeciesFlowRate(fluidRegions[j],phi, Y[index], listOutletBoundaries[j]);
-		double Den = calculateMassFlowRate(fluidRegions[j],phi,listOutletBoundaries[j]);
+		double Num = calculateSpeciesFlowRate(fluidRegions[j],phi, Y[index], listOutletBoundaries[k]);
+		double Den = calculateMassFlowRate(fluidRegions[j],phi,listOutletBoundaries[k]);
 		speciesMassFlowOutlet += Num/Den;
 	}
 	ConversionVector[index+1] = (speciesMassFlowInlet-speciesMassFlowOutlet)*100./max(1.e-64, speciesMassFlowInlet);
