@@ -21,6 +21,33 @@ int main(int argc, char *argv[])
     psiThermo& thermo = pThermo();
     thermo.validate(args.executable(), "h", "e");
 
+    volScalarField cp
+    (
+        IOobject
+        (
+            "cp",
+            runTime.timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        thermo.Cp()
+    );
+
+
+    volScalarField k
+    (
+        IOobject
+        (
+            "k",
+            runTime.timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        thermo.kappa()
+    );
+
     volScalarField Pr
     (
         IOobject
@@ -34,7 +61,23 @@ int main(int argc, char *argv[])
         thermo.mu()*thermo.Cp()/thermo.kappa()
     );
 
+    volScalarField mu
+    (
+        IOobject
+        (
+            "mu",
+            runTime.timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        thermo.mu()
+    );
+
     Pr.write();
+    mu.write();
+    k.write();
+    cp.write();
 
     return 0;
 }
