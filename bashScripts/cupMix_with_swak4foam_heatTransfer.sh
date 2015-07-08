@@ -22,7 +22,7 @@ L=$(echo "$Lmax - $Lmin" | bc -l)
 dz=$(echo "$L/($N-1)" | bc -l)
 
 #Modified for heterogenous or homogeneous
-SpecieList=("T")
+SpecieList=("T" "cp" "Pr" "rho" "k" "mu")
 NS=$(echo "${#SpecieList[@]}" | bc -l)
 
 #Source OpenFOAM 2.3.1
@@ -62,7 +62,7 @@ do
 	echo "runTimeModifiable yes;" >> controlDict
 	echo "adjustTimeStep  yes;" >> controlDict
 	echo "maxCo           0.1;" >> controlDict
-	echo "libs (\"libCatalyticWall.so\" \"libgroovyBC.so\" \"libsimpleSwakFunctionObjects.so\");" >> controlDict
+	echo "libs (\"libgroovyBC.so\" \"libsimpleSwakFunctionObjects.so\");" >> controlDict
 	echo "functions" >> controlDict
 	echo "{" >> controlDict
 
@@ -128,7 +128,7 @@ do
 	rm -rf postProcessing
 
 	#Post processor, depens on type of simulation
-	postProcessorCupMixForRhoSimpleFoam
+	postProcessorCupMixForHeatTransfer
 	folderToRemove=$(ls -t | sed -n "1p")
 	rm -rf $folderToRemove
 
@@ -137,19 +137,19 @@ do
 	cd postProcessing
 	if [ "$k" -eq "$NS" ]
 	then
-		rm -f ../rho.txt
-		touch ../rho.txt
+		rm -f ../cTot.txt
+		touch ../cTot.txt
 		for i in $(seq 1 $N)
 		do
 			folderName=$swakFolder$i
 			if [ "$i" -eq 1 ]
 			then
-				echo "#cTot" >> ../rho.txt
+				echo "#cTot" >> ../cTot.txt
 				value=$(sed -n "2p" $swakFolder$i/$time/z$i | awk '{print $2}')
-				echo "$value" >> ../rho.txt
+				echo "$value" >> ../cTot.txt
 			else
 				value=$(sed -n "2p" $swakFolder$i/$time/z$i | awk '{print $2}')
-				echo "$value" >> ../rho.txt
+				echo "$value" >> ../cTot.txt
 			fi
 		done
 	else
@@ -178,10 +178,10 @@ for k in $(seq 0 $NS)
 do
 	if [ "$k" -eq "$NS" ]
 	then
-		paste temp.txt rho.txt >> temp1.txt
+		paste temp.txt cTot.txt >> temp1.txt
 		rm -f temp.txt
 		mv temp1.txt temp.txt
-		rm -f rho.txt
+		rm -f cTot.txt
 	else	
 		paste temp.txt ${SpecieList[k]}.txt >> temp1.txt
 		rm -f temp.txt
