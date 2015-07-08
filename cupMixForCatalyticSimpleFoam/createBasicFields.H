@@ -113,7 +113,7 @@ volScalarField mu
 (
     IOobject
     (
-        "gas::mu",
+        "mu",
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,

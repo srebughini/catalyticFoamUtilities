@@ -1,5 +1,6 @@
 PtrList<volScalarField> Y(thermodynamicsMapXML->NumberOfSpecies());
 PtrList<volScalarField> Dmix(thermodynamicsMapXML->NumberOfSpecies());
+PtrList<volScalarField> Sc(thermodynamicsMapXML->NumberOfSpecies());
 
 for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
 {
@@ -77,7 +78,7 @@ for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
             (
                 IOobject
                 (
-                    "gas::Dmix_"+ thermodynamicsMapXML->NamesOfSpecies()[i],
+                    "Dmix_"+ thermodynamicsMapXML->NamesOfSpecies()[i],
                     mesh.time().timeName(),
                     mesh,
                     IOobject::NO_READ,
@@ -89,6 +90,25 @@ for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
         );
     }
 
+    {
+        Sc.set
+        (
+            i,
+            new volScalarField
+            (
+                IOobject
+                (
+                    "Sc_"+ thermodynamicsMapXML->NamesOfSpecies()[i],
+                    mesh.time().timeName(),
+                    mesh,
+                    IOobject::READ_IF_PRESENT,
+                    IOobject::NO_WRITE
+                ),
+                mesh,
+                dimensionSet(0, 0, 0, 0, 0)
+            )
+        );
+    }
 }
 
 mu = dimensionedScalar("zero", dimensionSet(1, -1, -1, 0, 0), 1.8e-5);
