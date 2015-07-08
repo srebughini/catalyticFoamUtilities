@@ -60,7 +60,7 @@ volScalarField Pr
         IOobject::NO_READ,
         IOobject::AUTO_WRITE
     ),
-    thermo.mu()/(thermo.Cp()*thermo.kappa())
+    thermo.mu()*thermo.Cp()/thermo.kappa()
 );
 
 volScalarField mu
