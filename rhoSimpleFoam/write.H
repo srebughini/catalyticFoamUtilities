@@ -1,8 +1,8 @@
 //Write on terminal
 cout.setf(std::ios::scientific);
 Info << "-------------------------------------------------------------" << endl;
-Info << "Mean velocity           = " << Umean << " [m/s]" << endl;
-Info << "Max velocity            = " << Umax << " [m/s]" << endl;
+Info << "Mean velocity                = " << Umean << " [m/s]" << endl;
+Info << "Max velocity                 = " << Umax << " [m/s]" << endl;
 Info << "-------------------------------------------------------------" << endl;
 Info << "Mean pressure                = " << pMean/1.e05 << " [bar]" << endl;
 Info << "-------------------------------------------------------------" << endl;
