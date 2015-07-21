@@ -157,12 +157,12 @@ const dictionary& physicalModelDictionary = solverOptions.subDict("PhysicalModel
     AlfaCatalyst = readScalar(physicalModelDictionary.lookup("alfaCatalyst"));
 }
 
-List<word> patchCatalytic;
-label      catalystIndex;
-bool       catalyst = false;
-scalar     rhoS;
-scalar     cpS;
-scalar     lambdaS;
+List<word>    patchCatalytic;
+label         catalystIndex;
+bool          catalyst = false;
+List<scalar>  rhoS;
+List<scalar>  cpS;
+List<scalar>  lambdaS;
 
 const dictionary& catalystDictionary = solverOptions.subDict("Catalyst");
 {
@@ -184,9 +184,9 @@ const dictionary& catalystDictionary = solverOptions.subDict("Catalyst");
 
 
     // Catalyst properties
-    rhoS    = readScalar(catalystDictionary.lookup("density"));
-    cpS     = readScalar(catalystDictionary.lookup("specificHeat"));
-    lambdaS = readScalar(catalystDictionary.lookup("thermalConductivity"));
+    rhoS    = List<scalar>(catalystDictionary.lookup("density"));
+    cpS     = List<scalar>(catalystDictionary.lookup("specificHeat"));
+    lambdaS = List<scalar>(catalystDictionary.lookup("thermalConductivity"));
 }
 
 Info<< "\nSolver options correctly read\n" << endl;

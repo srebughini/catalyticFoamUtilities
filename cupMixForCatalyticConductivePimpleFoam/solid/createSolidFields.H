@@ -1,7 +1,5 @@
 // Initialise solid field pointer lists
 PtrList<volScalarField> TSolid(solidRegions.size());
-//PtrList<volScalarField> TSolid_Initial(solidRegions.size());
-//PtrList<volScalarField> TSolid_Boundary(solidRegions.size());
 PtrList<volScalarField> lambdaSolid(solidRegions.size());
 PtrList<volScalarField> cpSolid(solidRegions.size());
 PtrList<volScalarField> rhoSolid(solidRegions.size());
@@ -27,7 +25,7 @@ forAll(solidRegions, j)
                 IOobject::NO_WRITE
             ),
         solidRegions[j],
-        dimensionedScalar("rhoMaterial", dimensionSet(1, -3, 0, 0, 0),rhoS)
+        dimensionedScalar("rhoMaterial", dimensionSet(1, -3, 0, 0, 0),rhoS[j])
         )
     ); 
 
@@ -66,43 +64,7 @@ forAll(solidRegions, j)
             solidRegions[j]
         )
     );     
-/*
-    TSolid_Boundary.set
-    (
-        j,
-        new volScalarField
-        (
-            IOobject
-            (
-                "T.boundary",
-                runTime.timeName(),
-                solidRegions[j],
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-            solidRegions[j],
-            dimensionSet(0, 0, 0, 1, 0)
-        )
-    );    
-        
-    TSolid_Initial.set
-    (
-        j,
-        new volScalarField
-        (
-            IOobject
-            (
-                "T.init",
-                runTime.timeName(),
-                solidRegions[j],
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-            solidRegions[j],
-            dimensionSet(0, 0,0, 1, 0)
-        )
-    );
-*/
+
     Info<< "Creating field lambda\n" << endl;
     lambdaSolid.set
     (
@@ -118,10 +80,10 @@ forAll(solidRegions, j)
                 IOobject::NO_WRITE
             ),
             solidRegions[j],
-            dimensionedScalar("K", dimensionSet(1, 1, -3, -1, 0),lambdaS)
+            dimensionedScalar("K", dimensionSet(1, 1, -3, -1, 0),lambdaS[j])
         )
     );
-        
+
     Info<< "Creating field cp\n" << endl;
     cpSolid.set
     (
@@ -137,7 +99,7 @@ forAll(solidRegions, j)
                 IOobject::NO_WRITE
             ),
             solidRegions[j],
-            dimensionedScalar("specificHeats", dimensionSet(0, 2, -2, -1, 0),cpS)
+            dimensionedScalar("specificHeats", dimensionSet(0, 2, -2, -1, 0),cpS[j])
         )
     );
 }

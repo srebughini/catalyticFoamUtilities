@@ -1,4 +1,0 @@
-OBJECTS = \
-$(OBJECTS_DIR)/postProcessorCupMix.o\
-$(OBJECTS_DIR)/compressibleCourantNo.o\
-$(OBJECTS_DIR)/solidRegionDiffNo.o

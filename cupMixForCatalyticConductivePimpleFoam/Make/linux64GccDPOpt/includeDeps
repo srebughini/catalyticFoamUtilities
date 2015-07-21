@@ -1,3 +1,0 @@
-include postProcessorCupMix.dep
-include include/compressibleCourantNo.dep
-include include/solidRegionDiffNo.dep

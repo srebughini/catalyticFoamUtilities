@@ -1,4 +1,0 @@
-DEPENDENCIES = \
-postProcessorCupMix.dep\
-include/compressibleCourantNo.dep\
-include/solidRegionDiffNo.dep

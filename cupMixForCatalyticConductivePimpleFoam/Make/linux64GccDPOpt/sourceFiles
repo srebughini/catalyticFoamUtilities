@@ -1,4 +1,0 @@
-SOURCE = \
-postProcessorCupMix.C\
-include/compressibleCourantNo.C\
-include/solidRegionDiffNo.C
