@@ -29,7 +29,7 @@ NS=$(echo "${#SpecieList[@]} - 1" | bc -l)
 
 #Source OpenFOAM 2.3.1
 source $HOME/OpenFOAM/OpenFOAM-2.3.1/etc/bashrc
-foamCalc mag U
+foamCalc mag U -region $region
 
 #Run
 for k in $(seq 0 $NS)
