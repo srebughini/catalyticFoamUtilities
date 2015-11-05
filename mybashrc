@@ -2,7 +2,7 @@
 export OPENFOAM_VERSION='-DOPENFOAM_VERSION=23'
 
 #Compulsory path
-export EIGEN_LIBRARY_PATH=$HOME/NumericalLibraries/Eigen/eigen-3.2.4
-export BOOST_LIBRARY_PATH=$HOME/NumericalLibraries/Boost/boost_1_57_0/build
-export RAPIDXML_LIBRARY_PATH=$HOME/NumericalLibraries/Rapidxml/rapidxml-1.13 
+export EIGEN_LIBRARY_PATH=$HOME/NumericalLibraries/Eigen/eigen-3.2.6
+export BOOST_LIBRARY_PATH=$HOME/NumericalLibraries/Boost/boost_1_59_0/build
+export RAPIDXML_LIBRARY_PATH=$HOME/NumericalLibraries/Rapidxml/
 export OPENSMOKE_LIBRARY_PATH=$HOME/NumericalLibraries/OpenSMOKEpp/source
