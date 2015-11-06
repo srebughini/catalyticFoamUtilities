@@ -54,12 +54,16 @@ double OutletTemperature = 0.;
 		thermodynamicsMapXML->SetPressure(InletPressure);
 		thermodynamicsMapXML->SetTemperature(InletTemperature);
 		thermodynamicsMapXML->hMolar_Species(h);
-		double G = MassFractionInlet.SumElements();
+
+		double G;
+		for (int k=0;k<listInletBoundaries.size();k++)
+		{
+			G += calculateMassFlowRate(mesh,phi,listInletBoundaries[k]);
+		}
 		for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
 		{
 			EnthalpyFluxIn += MassFractionInlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
 		}
-		Info << G << endl;
 	}
 
 	{
@@ -67,13 +71,16 @@ double OutletTemperature = 0.;
 		thermodynamicsMapXML->SetPressure(OutletPressure);
 		thermodynamicsMapXML->SetTemperature(OutletTemperature);
 		thermodynamicsMapXML->hMolar_Species(h);
-		double G = MassFractionOutlet.SumElements();
+
+		double G;
+		for (int k=0;k<listOutletBoundaries.size();k++)
+		{
+			G += calculateMassFlowRate(mesh,phi,listOutletBoundaries[k]);
+		}
+
 		for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
 		{
-			EnthalpyFluxOut += MassFractionOutlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
+			EnthalpyFluxOut += MassFractionOutlet[k]*h[k]*(-G)/thermodynamicsMapXML->MW()[k];
 		}
-		Info << G << endl;
 	}
-	
-	getchar();
 }

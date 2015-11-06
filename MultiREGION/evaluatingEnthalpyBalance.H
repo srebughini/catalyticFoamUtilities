@@ -7,7 +7,7 @@ double OutletTemperature = 0.;
 	//- Evaluating temperature
 	for (int k=0;k<listInletBoundaries.size();k++)
 	{
-		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listInletBoundaries[k]);
+		label patchID = fluidRegions[j].boundaryfluidRegions[j]().findPatchID(listInletBoundaries[k]);
 		forAll(Y[0].boundaryField()[patchID] , facei)
 		{
 			double area = fluidRegions[j].magSf().boundaryField()[patchID][facei];
@@ -16,7 +16,7 @@ double OutletTemperature = 0.;
 	}
 	for (int k=0;k<listOutletBoundaries.size();k++)
 	{
-		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listOutletBoundaries[k]);
+		label patchID = fluidRegions[j].boundaryfluidRegions[j]().findPatchID(listOutletBoundaries[k]);
 		forAll(Y[0].boundaryField()[patchID] , facei)
 		{
 			double area = fluidRegions[j].magSf().boundaryField()[patchID][facei];
@@ -54,7 +54,12 @@ double OutletTemperature = 0.;
 		thermodynamicsMapXML->SetPressure(InletPressure);
 		thermodynamicsMapXML->SetTemperature(InletTemperature);
 		thermodynamicsMapXML->hMolar_Species(h);
-		double G = MassFractionInlet.SumElements();
+
+		double G;
+		for (int k=0;k<listInletBoundaries.size();k++)
+		{
+			G += calculateMassFlowRate(fluidRegions[j],phi,listInletBoundaries[k]);
+		}
 		for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
 		{
 			EnthalpyFluxIn += MassFractionInlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
@@ -66,10 +71,16 @@ double OutletTemperature = 0.;
 		thermodynamicsMapXML->SetPressure(OutletPressure);
 		thermodynamicsMapXML->SetTemperature(OutletTemperature);
 		thermodynamicsMapXML->hMolar_Species(h);
-		double G = MassFractionOutlet.SumElements();
+
+		double G;
+		for (int k=0;k<listOutletBoundaries.size();k++)
+		{
+			G += calculateMassFlowRate(fluidRegions[j],phi,listOutletBoundaries[k]);
+		}
+
 		for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
 		{
-			EnthalpyFluxOut += MassFractionOutlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
+			EnthalpyFluxOut += MassFractionOutlet[k]*h[k]*(-G)/thermodynamicsMapXML->MW()[k];
 		}
 	}
 }
