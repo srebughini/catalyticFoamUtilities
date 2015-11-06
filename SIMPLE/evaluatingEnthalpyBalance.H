@@ -47,30 +47,33 @@ double OutletTemperature = 0.;
 		ConversionVector[index+1] = (speciesMassFlowInlet-speciesMassFlowOutlet)*100./max(1.e-64, speciesMassFlowInlet);
 		MassFractionInlet[index+1] = speciesMassFlowInlet;
 		MassFractionOutlet[index+1] = speciesMassFlowOutlet;
-
-		{
-			OpenSMOKE::OpenSMOKEVectorDouble h(thermodynamicsMapXML->NumberOfSpecies());
-			thermodynamicsMapXML->SetPressure(InletPressure);
-			thermodynamicsMapXML->SetTemperature(InletTemperature);
-			thermodynamicsMapXML->hMolar_Species(h);
-			double G = MassFractionInlet.SumElements();
-			for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
-			{
-				EnthalpyFluxIn += MassFractionInlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
-			}
-		}
-
-		{
-			OpenSMOKE::OpenSMOKEVectorDouble h(thermodynamicsMapXML->NumberOfSpecies());
-			thermodynamicsMapXML->SetPressure(OutletPressure);
-			thermodynamicsMapXML->SetTemperature(OutletTemperature);
-			thermodynamicsMapXML->hMolar_Species(h);
-			double G = MassFractionOutlet.SumElements();
-			for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
-			{
-				EnthalpyFluxOut += MassFractionOutlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
-			}
-		}
-
 	}
+
+	{
+		OpenSMOKE::OpenSMOKEVectorDouble h(thermodynamicsMapXML->NumberOfSpecies());
+		thermodynamicsMapXML->SetPressure(InletPressure);
+		thermodynamicsMapXML->SetTemperature(InletTemperature);
+		thermodynamicsMapXML->hMolar_Species(h);
+		double G = MassFractionInlet.SumElements();
+		for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
+		{
+			EnthalpyFluxIn += MassFractionInlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
+		}
+		Info << G << endl;
+	}
+
+	{
+		OpenSMOKE::OpenSMOKEVectorDouble h(thermodynamicsMapXML->NumberOfSpecies());
+		thermodynamicsMapXML->SetPressure(OutletPressure);
+		thermodynamicsMapXML->SetTemperature(OutletTemperature);
+		thermodynamicsMapXML->hMolar_Species(h);
+		double G = MassFractionOutlet.SumElements();
+		for (unsigned int k=1;k<=thermodynamicsMapXML->NumberOfSpecies();k++)
+		{
+			EnthalpyFluxOut += MassFractionOutlet[k]*h[k]*G/thermodynamicsMapXML->MW()[k];
+		}
+		Info << G << endl;
+	}
+	
+	getchar();
 }
