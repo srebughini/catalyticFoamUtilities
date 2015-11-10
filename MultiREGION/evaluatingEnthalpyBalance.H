@@ -7,7 +7,7 @@ double OutletTemperature = 0.;
 	//- Evaluating temperature
 	for (int k=0;k<listInletBoundaries.size();k++)
 	{
-		label patchID = fluidRegions[j].boundaryfluidRegions[j]().findPatchID(listInletBoundaries[k]);
+		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listInletBoundaries[k]);
 		forAll(Y[0].boundaryField()[patchID] , facei)
 		{
 			double area = fluidRegions[j].magSf().boundaryField()[patchID][facei];
@@ -16,7 +16,7 @@ double OutletTemperature = 0.;
 	}
 	for (int k=0;k<listOutletBoundaries.size();k++)
 	{
-		label patchID = fluidRegions[j].boundaryfluidRegions[j]().findPatchID(listOutletBoundaries[k]);
+		label patchID = fluidRegions[j].boundaryMesh().findPatchID(listOutletBoundaries[k]);
 		forAll(Y[0].boundaryField()[patchID] , facei)
 		{
 			double area = fluidRegions[j].magSf().boundaryField()[patchID][facei];
