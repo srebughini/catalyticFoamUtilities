@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     #include "evaluatingAtomBalance.H"
     #include "evaluatingPressureDrops.H"
     #include "evaluatingTransportProperties.H"
+    #include "evaluatingEnthalpyBalance.H"
     #include "write.H"
 
     return 0;

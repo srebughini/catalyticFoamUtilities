@@ -44,30 +44,9 @@
                 transportMapXML->DynamicViscosity(muCells[celli],moleFractions);
             }
 
-            if (diffusivityModel == DIFFUSIVITY_MODEL_LEWIS_NUMBERS)
-            {
-                transportMapXML->ThermalConductivity(lambdaCells[celli],moleFractions);
-                
-                thermodynamicsMapXML->cpMolar_Mixture_From_MoleFractions(cpCells[celli], moleFractions);            //[J/Kmol/K]
-                cpCells[celli] = cpCells[celli]/MWmixCells[celli];
-
-                thermodynamicsMapXML->hMolar_Species(HVector);
-                for(unsigned int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
-                    HSpecies[i].internalField()[celli] = HVector[i+1] / thermodynamicsMapXML->MW()[i+1];
-            }
-            
-            if (diffusivityModel == DIFFUSIVITY_MODEL_MULTICOMPONENT)
-            {
-                transportMapXML->MassDiffusionCoefficients(Dmixvector, moleFractions);
-                for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
-                    Dmix[i].internalField()[celli] = Dmixvector[i+1];
-            }
-            else if (diffusivityModel == DIFFUSIVITY_MODEL_LEWIS_NUMBERS)
-            {
-                const double coefficient = lambdaCells[celli]/(pCells[celli]*psiCells[celli])/cpCells[celli];
-                for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
-                    Dmix[i].internalField()[celli] = coefficient/LewisNumbers(i);
-            }
+            transportMapXML->MassDiffusionCoefficients(Dmixvector, moleFractions);
+            for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
+                Dmix[i].internalField()[celli] = Dmixvector[i+1];
             
             // Atomic fields
             {
@@ -128,32 +107,10 @@
                 transportMapXML->DynamicViscosity(pmu[facei],moleFractions);
             }
 
-            if (diffusivityModel == DIFFUSIVITY_MODEL_LEWIS_NUMBERS)
-            {
-                transportMapXML->ThermalConductivity(plambda[facei],moleFractions);
-                
-                thermodynamicsMapXML->cpMolar_Mixture_From_MoleFractions(pcp[facei], moleFractions);            //[J/Kmol/K]
-                pcp[facei] = pcp[facei]/pMWmix[facei];
-
-                thermodynamicsMapXML->hMolar_Species(HVector);
-                for(unsigned int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
-                    HSpecies[i].boundaryField()[patchi][facei] = HVector[i+1] / thermodynamicsMapXML->MW()[i+1];
-
-            }
-
-            if (diffusivityModel == DIFFUSIVITY_MODEL_MULTICOMPONENT)
-            {
-                transportMapXML->MassDiffusionCoefficients(Dmixvector,moleFractions);
-                for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
-                    Dmix[i].boundaryField()[patchi][facei] = Dmixvector[i+1];
-            }
-            else if (diffusivityModel == DIFFUSIVITY_MODEL_LEWIS_NUMBERS)
-            {
-                const double coefficient =  plambda[facei]/(pp[facei]*ppsi[facei])/pcp[facei];
-                for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
-                    Dmix[i].boundaryField()[patchi][facei] = coefficient/LewisNumbers(i);
-            }
-
+            transportMapXML->MassDiffusionCoefficients(Dmixvector,moleFractions);
+            for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
+                Dmix[i].boundaryField()[patchi][facei] = Dmixvector[i+1];
+ 
             // Atomic fields
             {
                 ElementsNames = thermodynamicsMapXML->elements();
