@@ -15,12 +15,8 @@
 
 #include "reactors/utilities/Utilities"
 
-#include "catalyticReactorClass.H"
-
 #include "fvCFD.H"
 #include "multivariateScheme.H"
-#include "pimpleControl.H"
-#include "fvIOoptionList.H"
 #include "regionProperties.H"
 
 #include "extraFunctions.H"
@@ -30,17 +26,19 @@ int main(int argc, char **argv)
 	#include "setRootCase.H"
 	#include "createTime.H"
 
-	regionProperties rp(runTime); 
+    regionProperties rp(runTime); 
 
-	#include "readSolverOptions.H"
+    #include "createFluidMeshes.H" 
+    #include "createSolidMeshes.H" 
+
+    #include "readSolverOptions.H"
+    #include "readFluidProperties.H"
+    #include "readSolidProperties.H"
+    
 	#include "readASALIresults.H"
-
-	#include "createFluidMeshes.H" 
-	#include "createSolidMeshes.H" 
 
 	#include "createFluidFields.H"
 	#include "createSolidFields.H"
-    #include "catalystTopology.H"
 
 	#include "pasteASALItoCFD.H"
 
