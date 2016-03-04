@@ -60,6 +60,5 @@ const dictionary& kineticsDictionary = solverOptions.subDict("Kinetics");
         double tEnd = OpenSMOKE::OpenSMOKEGetCpuTime();
     }    
 }
-
 Info<< "Solver options correctly read" << nl << endl;
 

@@ -22,20 +22,19 @@ PtrList<volScalarField>     MWFluid(thermodynamicsMapXML->NumberOfSpecies()*flui
 PtrList<volScalarField>     sourceImplicitSpecieFluid(thermodynamicsMapXML->NumberOfSpecies()*fluidRegions.size());
 PtrList<volScalarField>     sourceExplicitSpecieFluid(thermodynamicsMapXML->NumberOfSpecies()*fluidRegions.size());
 
-PtrList<surfaceScalarField> JFluid(thermodynamicsMapXML->NumberOfSpecies()*fluidRegions.size());
-PtrList<surfaceScalarField> JcFluid(fluidRegions.size());
-PtrList<volScalarField>     sumDiffusionCorrectionsFluid(fluidRegions.size());
-
 List<scalar>                initialMassFluid(fluidRegions.size());
 List<label>                 pRefCellFluid(fluidRegions.size(), 0);
 List<scalar>                pRefValueFluid(fluidRegions.size(), 0.0);
+
+
+PtrList<volScalarField>     PrFluid(fluidRegions.size());
 
 forAll(fluidRegions, j)
 {
     Info<< "Reading region " << fluidRegions[j].name() << "\n" << endl;
 
     Info<< "Reading field U\n" << endl;
-    UFluid.set   // speed [m/s]
+    UFluid.set
     (
         j,
         new volVectorField
@@ -178,39 +177,22 @@ forAll(fluidRegions, j)
         )
     );
 
-    JcFluid.set
-    (
-        j,
-        new surfaceScalarField
-        (
-            IOobject
-            (
-				"Jc",
-				runTime.timeName(),
-				fluidRegions[j],
-				IOobject::NO_READ,
-				IOobject::NO_WRITE
-            ),
-            fluidRegions[j],
-            dimensionedScalar("J::Jc", dimensionSet(1, 0, -1, 0, 0), 0.0)
-        )
-    );
 
-    sumDiffusionCorrectionsFluid.set
+    PrFluid.set
     (
         j,
         new volScalarField
         (
             IOobject
             (
-				"sumCorrections",
-				runTime.timeName(),
-				fluidRegions[j],
-				IOobject::NO_READ,
-				IOobject::NO_WRITE
+                "Pr",
+                runTime.timeName(),
+                fluidRegions[j],
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
             ),
             fluidRegions[j],
-            dimensionedScalar("zero", dimensionSet(1, -3, -1, 0, 0), 0.0)
+            dimensionSet(0,0, 0, 0, 0)
         )
     );
 
@@ -221,14 +203,14 @@ forAll(fluidRegions, j)
         (
             IOobject
             (
-				"SI::T",
-				runTime.timeName(),
-				fluidRegions[j],
-				IOobject::NO_READ,
-				IOobject::NO_WRITE
+                "SI::T",
+                runTime.timeName(),
+                fluidRegions[j],
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
             ),
             fluidRegions[j],
-			dimensionedScalar("SI::T", dimensionSet(1, -1, -3, -1, 0), 0.0)
+            dimensionedScalar("SI::T", dimensionSet(1, -1, -3, -1, 0), 0.0)
         )
     );
 
@@ -239,14 +221,14 @@ forAll(fluidRegions, j)
         (
             IOobject
             (
-				"SI::T",
-				runTime.timeName(),
-				fluidRegions[j],
-				IOobject::NO_READ,
-				IOobject::NO_WRITE
+                "SI::T",
+                runTime.timeName(),
+                fluidRegions[j],
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
             ),
             fluidRegions[j],
-			dimensionedScalar("SE::T", dimensionSet(1, -1, -3, 0, 0), 0.0)
+            dimensionedScalar("SE::T", dimensionSet(1, -1, -3, 0, 0), 0.0)
         )
     );
 
@@ -351,24 +333,6 @@ forAll(fluidRegions, j)
             )
         );
 
-        JFluid.set
-        (
-            j*thermodynamicsMapXML->NumberOfSpecies()+i,
-            new surfaceScalarField
-            (
-                IOobject
-                (
-                    "J::"+ thermodynamicsMapXML->NamesOfSpecies()[i],
-                    runTime.timeName(),
-                    fluidRegions[j],
-                    IOobject::NO_READ,
-                    IOobject::NO_WRITE
-                ),
-                fluidRegions[j],
-                dimensionedScalar("zero", dimensionSet(1, 0, -1, 0, 0),0.0)
-            )
-        );
-
         sourceImplicitSpecieFluid.set
         (
             j*thermodynamicsMapXML->NumberOfSpecies()+i,
@@ -376,11 +340,11 @@ forAll(fluidRegions, j)
             (
                 IOobject
                 (
-					"SI::" + thermodynamicsMapXML->NamesOfSpecies()[i],
+                    "SI::" + thermodynamicsMapXML->NamesOfSpecies()[i],
                     runTime.timeName(),
-					fluidRegions[j],
-					IOobject::NO_READ,
-					IOobject::NO_WRITE
+                    fluidRegions[j],
+                    IOobject::NO_READ,
+                    IOobject::NO_WRITE
                 ),
                 fluidRegions[j],
                 dimensionedScalar("SI", dimensionSet(1, -3, -1, 0, 0), 0.0)
@@ -394,14 +358,14 @@ forAll(fluidRegions, j)
             (
                 IOobject
                 (
-					"SE::" + thermodynamicsMapXML->NamesOfSpecies()[i],
+                    "SE::" + thermodynamicsMapXML->NamesOfSpecies()[i],
                     runTime.timeName(),
-					fluidRegions[j],
-					IOobject::NO_READ,
-					IOobject::NO_WRITE
+                    fluidRegions[j],
+                    IOobject::NO_READ,
+                    IOobject::NO_WRITE
                 ),
                 fluidRegions[j],
-				dimensionedScalar("SE", dimensionSet(1, -3, -1, 0, 0), 0.0)
+                dimensionedScalar("SE", dimensionSet(1, -3, -1, 0, 0), 0.0)
             )
         );
 

@@ -43,19 +43,19 @@ forAll(solidRegions, j)
             
             thermodynamicsMapXML->cpMolar_Mixture_From_MoleFractions(cpCells[celli], moleFractions);
             cpCells[celli] = cpCells[celli]/MWmixCells[celli];
-			
-			psiCells[celli]  = MWmixCells[celli]/PhysicalConstants::R_J_kmol/TCells[celli];
-			rhoCells[celli]  = psiCells[celli]*pCells[celli];
+            
+            psiCells[celli]  = MWmixCells[celli]/PhysicalConstants::R_J_kmol/TCells[celli];
+            rhoCells[celli]  = psiCells[celli]*pCells[celli];
 
-			if ( diffusivityLaw[j] == "EffectiveDiffusivityModel" )
+            if ( diffusivityLaw[j] == "EffectiveDiffusivityModel" )
             {
-				transportMapXML->MassDiffusionCoefficients(Dmixvector, moleFractions);
-				for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
-				{
-					DmixSolid[j*thermodynamicsMapXML->NumberOfSpecies()+i].internalField()[celli] = Dmixvector[i+1]*(epsiM[j]/tauM[j])*symmTensor::I;
-					rDSolid[j*thermodynamicsMapXML->NumberOfSpecies()+i].internalField()[celli] = Dmixvector[i+1]*(epsiM[j]/tauM[j])*symmTensor::I*pCells[celli]*MWmixCells[celli]/(PhysicalConstants::R_J_kmol*TCells[celli]);
-				}
-			}
+                transportMapXML->MassDiffusionCoefficients(Dmixvector, moleFractions);
+                for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
+                {
+                    DmixSolid[j*thermodynamicsMapXML->NumberOfSpecies()+i].internalField()[celli] = Dmixvector[i+1]*edcM[j]*symmTensor::I;
+                    rDSolid[j*thermodynamicsMapXML->NumberOfSpecies()+i].internalField()[celli] = Dmixvector[i+1]*edcM[j]*symmTensor::I*pCells[celli]*MWmixCells[celli]/(PhysicalConstants::R_J_kmol*TCells[celli]);
+                }
+            }
         }
     }
 
@@ -99,18 +99,18 @@ forAll(solidRegions, j)
             thermodynamicsMapXML->cpMolar_Mixture_From_MoleFractions(pcp[facei], moleFractions);
             pcp[facei] = pcp[facei]/pMWmix[facei];
 
-			ppsi[facei]  = pMWmix[facei]/PhysicalConstants::R_J_kmol/pT[facei];
-			prho[facei]  = ppsi[facei]*pp[facei];
+            ppsi[facei]  = pMWmix[facei]/PhysicalConstants::R_J_kmol/pT[facei];
+            prho[facei]  = ppsi[facei]*pp[facei];
 
-			if ( diffusivityLaw[j] == "EffectiveDiffusivityModel" )
+            if ( diffusivityLaw[j] == "EffectiveDiffusivityModel" )
             {
-				transportMapXML->MassDiffusionCoefficients(Dmixvector,moleFractions);
-				for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
-				{
-					DmixSolid[j*thermodynamicsMapXML->NumberOfSpecies()+i].boundaryField()[patchi][facei] = Dmixvector[i+1]*(epsiM[j]/tauM[j])*symmTensor::I;
-					rDSolid[j*thermodynamicsMapXML->NumberOfSpecies()+i].boundaryField()[patchi][facei]   = Dmixvector[i+1]*(epsiM[j]/tauM[j])*symmTensor::I*pp[facei]*pMWmix[facei]/(PhysicalConstants::R_J_kmol*pT[facei]);
-				}
-			}
+                transportMapXML->MassDiffusionCoefficients(Dmixvector,moleFractions);
+                for(int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
+                {
+                    DmixSolid[j*thermodynamicsMapXML->NumberOfSpecies()+i].boundaryField()[patchi][facei] = Dmixvector[i+1]*edcM[j]*symmTensor::I;
+                    rDSolid[j*thermodynamicsMapXML->NumberOfSpecies()+i].boundaryField()[patchi][facei]   = Dmixvector[i+1]*edcM[j]*symmTensor::I*pp[facei]*pMWmix[facei]/(PhysicalConstants::R_J_kmol*pT[facei]);
+                }
+            }
         }
     }
 }

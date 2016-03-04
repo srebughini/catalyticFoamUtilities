@@ -10,10 +10,9 @@ PtrList<volScalarField>     sourceImplicitTempSolid(solidRegions.size());
 PtrList<volScalarField>     sourceExplicitTempSolid(solidRegions.size());
 
 PtrList<volScalarField>     lambdaMaterial(solidRegions.size());
-PtrList<volScalarField>     cpMaterial(solidRegions.size());
-PtrList<volScalarField>     rhoMaterial(solidRegions.size());
 
 PtrList<volScalarField>     YSolid(thermodynamicsMapXML->NumberOfSpecies()*solidRegions.size());
+
 PtrList<volScalarField>     RSolid(thermodynamicsMapXML->NumberOfSpecies()*solidRegions.size());
 PtrList<volScalarField>     XSolid(thermodynamicsMapXML->NumberOfSpecies()*solidRegions.size());
 PtrList<volSymmTensorField> DmixSolid(thermodynamicsMapXML->NumberOfSpecies()*solidRegions.size());
@@ -24,31 +23,15 @@ PtrList<volScalarField>     sourceExplicitSpecieSolid(thermodynamicsMapXML->Numb
 
 PtrList<volScalarField>     ZSolid(surfaceThermodynamicsMapXML->number_of_site_species()*solidRegions.size());
 
-PtrList<surfaceScalarField> JSolid(thermodynamicsMapXML->NumberOfSpecies()*solidRegions.size());
-PtrList<surfaceScalarField> JcSolid(solidRegions.size());
-PtrList<volScalarField>     sumDiffusionCorrectionsSolid(solidRegions.size());
+PtrList<volScalarField>     TSolidNormalized(solidRegions.size());
+PtrList<volScalarField>     YSolidNormalized(thermodynamicsMapXML->NumberOfSpecies()*solidRegions.size());
+
+PtrList<volScalarField>     binSolid(solidRegions.size());
+
 
 forAll(solidRegions, j)
 {
     Info<< "Reading region " << solidRegions[j].name() << "\n" << endl;   
-
-    rhoMaterial.set
-    (   
-        j,
-        new volScalarField
-        (
-            IOobject
-            (
-                "rho",
-                runTime.timeName(),
-                solidRegions[j],
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-			solidRegions[j],
-			dimensionedScalar("rho", dimensionSet(1, -3, 0, 0, 0),rhoM[j])
-        )
-    ); 
 
     rhoSolid.set
     (   j,
@@ -63,7 +46,7 @@ forAll(solidRegions, j)
                 IOobject::AUTO_WRITE
             ),
             solidRegions[j],
-			dimensionedScalar("gas::rho", dimensionSet(1, -3, 0, 0, 0),0.0)
+            dimensionedScalar("gas::rho", dimensionSet(1, -3, 0, 0, 0),0.0)
         )
     );
 
@@ -85,6 +68,24 @@ forAll(solidRegions, j)
         )
     );     
 
+    TSolidNormalized.set
+    (
+        j,
+        new volScalarField
+        (
+            IOobject
+            (
+                "Tn",
+                runTime.timeName(),
+                solidRegions[j],
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            solidRegions[j],
+            dimensionedScalar("zero", dimensionSet(0, 0, 0, 0, 0),0.0)
+        )
+    );    
+
     MWmixSolid.set
     (
         j,
@@ -102,7 +103,26 @@ forAll(solidRegions, j)
             dimensionSet(1, 0, 0, 0, -1)
         )
     );
-        
+
+    binSolid.set
+    (
+        j,
+        new volScalarField
+        (
+            IOobject
+            (
+                "bin",
+                runTime.timeName(),
+                solidRegions[j],
+                IOobject::NO_READ,
+                IOobject::AUTO_WRITE
+            ),
+            solidRegions[j],
+            dimensionedScalar("bin", dimensionSet(0, 0, 0, 0, 0),0.0)
+        )
+    );
+
+
     psiSolid.set
     (
         j,
@@ -196,24 +216,6 @@ forAll(solidRegions, j)
     );
 
 
-    cpMaterial.set
-    (
-        j,
-        new volScalarField
-        (
-            IOobject
-            (
-                "cp",
-                runTime.timeName(),
-                solidRegions[j],
-                IOobject::NO_READ,
-                IOobject::NO_WRITE
-            ),
-            solidRegions[j],
-            dimensionedScalar("cp", dimensionSet(0, 2, -2, -1, 0),cpM[j])
-        )
-    );
-
     cpSolid.set
     (
         j,
@@ -232,41 +234,6 @@ forAll(solidRegions, j)
         )
     );
 
-    JcSolid.set
-    (
-        j,
-        new surfaceScalarField
-        (
-            IOobject
-            (
-				"Jc",
-				runTime.timeName(),
-				solidRegions[j],
-				IOobject::NO_READ,
-				IOobject::NO_WRITE
-            ),
-            solidRegions[j],
-            dimensionedScalar("J::Jc", dimensionSet(1, 0, -1, 0, 0), 0.0)
-        )
-    );
-
-    sumDiffusionCorrectionsSolid.set
-    (
-        j,
-        new volScalarField
-        (
-            IOobject
-            (
-				"sumCorrections",
-				runTime.timeName(),
-				solidRegions[j],
-				IOobject::NO_READ,
-				IOobject::NO_WRITE
-            ),
-            solidRegions[j],
-            dimensionedScalar("zero", dimensionSet(1, -3, -1, 0, 0), 0.0)
-        )
-    );
 
     sourceImplicitTempSolid.set
     (
@@ -275,14 +242,14 @@ forAll(solidRegions, j)
         (
             IOobject
             (
-				"SI::T",
-				runTime.timeName(),
-				solidRegions[j],
-				IOobject::NO_READ,
-				IOobject::NO_WRITE
+                "SI::T",
+                runTime.timeName(),
+                solidRegions[j],
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
             ),
             solidRegions[j],
-			dimensionedScalar("SI::T", dimensionSet(1, -1, -3, -1, 0), 0.0)
+            dimensionedScalar("SI::T", dimensionSet(1, -1, -3, -1, 0), 0.0)
         )
     );
 
@@ -293,17 +260,16 @@ forAll(solidRegions, j)
         (
             IOobject
             (
-				"SI::T",
-				runTime.timeName(),
-				solidRegions[j],
-				IOobject::NO_READ,
-				IOobject::NO_WRITE
+                "SI::T",
+                runTime.timeName(),
+                solidRegions[j],
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
             ),
             solidRegions[j],
-			dimensionedScalar("SE::T", dimensionSet(1, -1, -3, 0, 0), 0.0)
+            dimensionedScalar("SE::T", dimensionSet(1, -1, -3, 0, 0), 0.0)
         )
     );
-
 
     for(unsigned int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
     {
@@ -388,6 +354,24 @@ forAll(solidRegions, j)
             )
         );
 
+        YSolidNormalized.set
+        (
+            j*thermodynamicsMapXML->NumberOfSpecies()+i,
+            new volScalarField
+            (
+                IOobject
+                (
+                    "Yn::"+ thermodynamicsMapXML->NamesOfSpecies()[i],
+                    runTime.timeName(),
+                    solidRegions[j],
+                    IOobject::NO_READ,
+                    IOobject::NO_WRITE
+                ),
+                solidRegions[j],
+                dimensionedScalar("zero", dimensionSet(0, 0, 0, 0, 0),0.0)
+            )
+        );
+
         MWSolid.set
         (
             j*thermodynamicsMapXML->NumberOfSpecies()+i,
@@ -406,24 +390,6 @@ forAll(solidRegions, j)
             )
         );
  
-        JSolid.set
-        (
-            j*thermodynamicsMapXML->NumberOfSpecies()+i,
-            new surfaceScalarField
-            (
-                IOobject
-                (
-                    "J::"+ thermodynamicsMapXML->NamesOfSpecies()[i],
-                    runTime.timeName(),
-                    solidRegions[j],
-                    IOobject::NO_READ,
-                    IOobject::NO_WRITE
-                ),
-                solidRegions[j],
-                dimensionedScalar("zero", dimensionSet(1, 0, -1, 0, 0),0.0)
-            )
-        );
-
         RSolid.set
         (
             j*thermodynamicsMapXML->NumberOfSpecies()+i,
@@ -449,11 +415,11 @@ forAll(solidRegions, j)
             (
                 IOobject
                 (
-					"SI::" + thermodynamicsMapXML->NamesOfSpecies()[i],
+                    "SI::" + thermodynamicsMapXML->NamesOfSpecies()[i],
                     runTime.timeName(),
-					solidRegions[j],
-					IOobject::NO_READ,
-					IOobject::NO_WRITE
+                    solidRegions[j],
+                    IOobject::NO_READ,
+                    IOobject::NO_WRITE
                 ),
                 solidRegions[j],
                 dimensionedScalar("SI", dimensionSet(1, -3, -1, 0, 0), 0.0)
@@ -467,21 +433,21 @@ forAll(solidRegions, j)
             (
                 IOobject
                 (
-					"SE::" + thermodynamicsMapXML->NamesOfSpecies()[i],
+                    "SE::" + thermodynamicsMapXML->NamesOfSpecies()[i],
                     runTime.timeName(),
-					solidRegions[j],
-					IOobject::NO_READ,
-					IOobject::NO_WRITE
+                    solidRegions[j],
+                    IOobject::NO_READ,
+                    IOobject::NO_WRITE
                 ),
                 solidRegions[j],
-				dimensionedScalar("SE", dimensionSet(1, -3, -1, 0, 0), 0.0)
+                dimensionedScalar("SE", dimensionSet(1, -3, -1, 0, 0), 0.0)
             )
         );
  
 
     }
 
-	Info << endl;
+    Info << endl;
 
     for(int i=0;i<surfaceThermodynamicsMapXML->number_of_site_species();i++)
     {
@@ -517,7 +483,7 @@ forAll(solidRegions, j)
         }
         else
         {
-			Info << "thetaDefault" << endl;
+            Info << "thetaDefault" << endl;
             volScalarField thetaDefault
             (
                 IOobject

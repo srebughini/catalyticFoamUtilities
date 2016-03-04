@@ -13,7 +13,9 @@ IOdictionary fluidProperties
 
 List<Switch>  chemistryFluid(fluidRegions.size());
 List<Switch>  energyFluid(fluidRegions.size());
-List<label>   inertIndexFluid(solidRegions.size());
+List<Switch>  implicitFluid(fluidRegions.size());
+List<Switch>  sparseFluid(fluidRegions.size());
+List<label>   inertIndexFluid(fluidRegions.size());
 
 forAll(fluidRegions, j)
 {
@@ -21,6 +23,8 @@ forAll(fluidRegions, j)
     {
         chemistryFluid[j]   = Switch(fluidDictionary.lookup("chemistry"));
         energyFluid[j]      = Switch(fluidDictionary.lookup("energy"));
+        implicitFluid[j]    = Switch(fluidDictionary.lookup("implicit"));
+        sparseFluid[j]      = Switch(fluidDictionary.lookup("sparse"));
 
         word inertSpecies(fluidDictionary.lookup("inert"));
         inertIndexFluid[j]    = thermodynamicsMapXML->IndexOfSpecies(inertSpecies)-1;
