@@ -66,5 +66,5 @@ forAll(fluidRegions, j)
                 fluidRegions[j]
             )
         );
-	}
+    }
 }

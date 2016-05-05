@@ -23,8 +23,8 @@
 
 int main(int argc, char **argv)
 {
-	#include "setRootCase.H"
-	#include "createTime.H"
+    #include "setRootCase.H"
+    #include "createTime.H"
 
     regionProperties rp(runTime); 
 
@@ -35,12 +35,12 @@ int main(int argc, char **argv)
     #include "readFluidProperties.H"
     #include "readSolidProperties.H"
     
-	#include "readASALIresults.H"
+    #include "readASALIresults.H"
 
-	#include "createFluidFields.H"
-	#include "createSolidFields.H"
+    #include "createFluidFields.H"
+    #include "createSolidFields.H"
 
-	#include "pasteASALItoCFD.H"
+    #include "pasteASALItoCFD.H"
 
-	return 0; 
+    return 0; 
 }

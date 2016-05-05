@@ -17,7 +17,7 @@ Info << "	OUT mass fraction [-]" << endl;
 for (int index=0;index<thermodynamicsMapXML->NumberOfSpecies();index++)
 		std::cout << Y[index].name() << "\t" << MassFractionOutlet[index+1] << std::endl;
 std::cout << "---------------------------------------------------" << std::endl;
-Info << "	Conversion [-]" << endl;
+Info << "	Conversion [%]" << endl;
 for (int index=0;index<thermodynamicsMapXML->NumberOfSpecies();index++)
 {
 	if (ConversionVector[index+1] > 0.)
@@ -77,7 +77,7 @@ fmassFlux << "	OUT mass fraction [-]" << std::endl;
 for (int index=0;index<thermodynamicsMapXML->NumberOfSpecies();index++)
 		fmassFlux << Y[index].name() << "\t" << MassFractionOutlet[index+1] << std::endl;
 fmassFlux << " " << std::endl;
-fmassFlux << "	Conversion [-]" << std::endl;
+fmassFlux << "	Conversion [%]" << std::endl;
 for (int index=0;index<thermodynamicsMapXML->NumberOfSpecies();index++)
 {
 	if (ConversionVector[index+1] > 0.)
@@ -99,7 +99,7 @@ for (int index=0;index<thermodynamicsMapXML->NumberOfSpecies();index++)
 	fmassFlux << Y[index].name() << "\t" << DmixMean[index+1] << std::endl;
 }
 fmassFlux << " " << std::endl;
-fmassFlux << "	Atomic balance error [-]" << std::endl;
+fmassFlux << "	Atomic balance error [%]" << std::endl;
 for (int index=0;index<elementNames_.size();index++)
 {
 	if ( ElementInlet[index+1] > 0 )
