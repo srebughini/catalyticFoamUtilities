@@ -1,4 +1,5 @@
 PtrList<volVectorField>     UFluid(fluidRegions.size());
+PtrList<volScalarField>     magUFluid(fluidRegions.size());
 PtrList<volScalarField>     pFluid(fluidRegions.size());
 PtrList<volScalarField>     TFluid(fluidRegions.size());
 PtrList<volScalarField>     MWmixFluid(fluidRegions.size());
@@ -50,7 +51,24 @@ forAll(fluidRegions, j)
             fluidRegions[j]
         )
     );
-        
+
+    magUFluid.set
+    (
+        j,
+        new volScalarField
+        (
+            IOobject
+            (
+                "magU",
+                runTime.timeName(),
+                fluidRegions[j],
+                IOobject::MUST_READ,
+                IOobject::AUTO_WRITE
+            ),
+            fluidRegions[j]
+        )
+    );
+     
     Info<< "Reading field p\n" << endl;
     pFluid.set
     (
@@ -304,7 +322,7 @@ forAll(fluidRegions, j)
             (
                 IOobject
                 (
-                    "X::"+ thermodynamicsMapXML->NamesOfSpecies()[i],
+                    "X_"+ thermodynamicsMapXML->NamesOfSpecies()[i],
                     runTime.timeName(),
                     fluidRegions[j],
                     IOobject::NO_READ,
