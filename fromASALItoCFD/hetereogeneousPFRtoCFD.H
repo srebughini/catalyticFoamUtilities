@@ -64,8 +64,8 @@ forAll(fluidRegions, j)
                             }
                         }
                     }
-                    
-                    moleFractions[inertIndexFluid[j]+1] = 1. - sum;
+
+                    moleFractions[inertIndexFluid[j]+1] = std::max(0.,1. - sum);
                     
                     thermodynamicsMapXML->MassFractions_From_MoleFractions(massFractions,dummy,moleFractions);
 
@@ -208,7 +208,7 @@ forAll(solidRegions, j)
                     double sum   = 0.;
                     for(unsigned int k=0;k<thermodynamicsMapXML->NumberOfSpecies();k++)
                     {
-                        if ( k != inertIndexFluid[j] )
+                        if ( k != inertIndexSolid[j] )
                         {
                             if (fabs(omegaWALLasali[i][k]) < 1e-09)
                             {
@@ -222,7 +222,7 @@ forAll(solidRegions, j)
                         }
                     }
                     
-                    moleFractions[inertIndexFluid[j]+1] = 1. - sum;
+                    moleFractions[inertIndexSolid[j]+1] = 1. - sum;
 
 
                     thermodynamicsMapXML->MassFractions_From_MoleFractions(massFractions,dummy,moleFractions);

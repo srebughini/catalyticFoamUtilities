@@ -35,12 +35,22 @@ int main(int argc, char **argv)
     #include "readFluidProperties.H"
     #include "readSolidProperties.H"
     
-    #include "readASALIresults.H"
-
-    #include "createFluidFields.H"
-    #include "createSolidFields.H"
-
-    #include "pasteASALItoCFD.H"
+    meshWarning();
+    
+    if ( asaliSolver == "heterogeneousPFR" )
+    {
+        #include "hetereogeneousPFRresults.H"
+        #include "createFluidFields.H"
+        #include "createSolidFields.H"
+        #include "hetereogeneousPFRtoCFD.H"
+    }
+    else if ( asaliSolver == "2Ds" )
+    {
+        #include "2Dresults.H"
+        #include "createFluidFields.H"
+        #include "createSolidFields.H"
+        #include "2DtoCFD.H"
+    }
 
     return 0; 
 }

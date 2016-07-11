@@ -49,7 +49,11 @@ const dictionary& kineticsDictionary = solverOptions.subDict("Kinetics");
 }
 
 unsigned int directionIndex;
+unsigned int radialIndex1;
+unsigned int radialIndex2;
+
 Foam::string asaliFolder;
+Foam::string asaliSolver;
 
 const dictionary& preProcessingDictionary = solverOptions.subDict("FromASALItoCFD");
 {
@@ -58,14 +62,20 @@ const dictionary& preProcessingDictionary = solverOptions.subDict("FromASALItoCF
     if ( mainDirection == "x" )
     {
         directionIndex = 0;
+        radialIndex1   = 1;
+        radialIndex2   = 2;
     }
     else if ( mainDirection == "y" )
     {
         directionIndex = 1;
+        radialIndex1   = 0;
+        radialIndex2   = 2;
     }
     else if ( mainDirection == "z" )
     {
         directionIndex = 2;
+        radialIndex1   = 0;
+        radialIndex2   = 1;
     }
     else
     {
@@ -73,5 +83,38 @@ const dictionary& preProcessingDictionary = solverOptions.subDict("FromASALItoCF
         abort();
     }
 
-    asaliFolder = Foam::string(preProcessingDictionary.lookup("ASALIfolder"));
+    asaliSolver = Foam::string(preProcessingDictionary.lookup("ASALIsolver"));
+    
+    if ( asaliSolver == "heterogeneousPFR" )
+    {
+        asaliFolder = Foam::string(preProcessingDictionary.lookup("ASALIfolder"));
+    }
+    else if ( asaliSolver == "2Ds" )
+    {
+        word reactorType(preProcessingDictionary.lookup("reactorType"));
+        
+        if ( reactorType == "honeyComb" )
+        {
+        }
+        else if ( reactorType == "packedBed" )
+        {
+        }
+        else if ( reactorType == "microPackedbed" )
+        {
+        }
+        else
+        {
+            Info << "Wrong axialDirection option: || packedBed || microPackedbed || honeyComb ||" << endl;
+            abort();
+        }
+
+        word reactorFolder(preProcessingDictionary.lookup("ASALIfolder"));
+
+        asaliFolder = reactorFolder + "/results/" + reactorType;
+    }
+    else
+    {
+        Info << "Wrong ASALIsolver option: || heterogeneousPFR || 2Ds ||" << endl;
+        abort();
+    }
 }
