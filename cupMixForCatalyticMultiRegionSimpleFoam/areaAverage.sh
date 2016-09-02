@@ -7,7 +7,7 @@ then
 	echo "2:   Max reactor length [m]"
 	echo "3:   Number of cells in axial direction"
 	echo "4:   Axial direction x:1 y:2 z:3"
-	echo "5:   FLUID region name"
+	echo "5:   SOLID region name"
 	echo "6:   FIELD name"
 	exit 1
 fi
@@ -78,13 +78,13 @@ echo " " >> controlDict
 echo "functions" >> controlDict
 echo "{" >> controlDict
 
-rm -f ../grid.txt
-touch ../grid.txt
+rm -f ../grid-$region.txt
+touch ../grid-$region.txt
 for i in $(seq 1 $N)
 do
 	#Create grid file
 	newL=$(echo "$i*$dz-$dz+$Lmin" | bc -l)
-	echo "$newL" >> ../grid.txt
+	echo "$newL" >> ../grid-$region.txt
 
 	echo "z$i"  >> controlDict
 	echo "{" >> controlDict
@@ -133,9 +133,9 @@ do
 	echo "	}" >> controlDict
 	echo " " >> controlDict
 	echo "	// Operation: areaAverage/sum/weightedAverage ..." >> controlDict
-	echo "	operation      sum; //areaAverage; //areaIntegrate;" >> controlDict
+	echo "	operation      areaAverage; //areaAverage; //areaIntegrate;" >> controlDict
 
-	echo "	fields          (G cup_$name);" >> controlDict
+	echo "	fields          ($name);" >> controlDict
 	echo "}" >> controlDict
 	echo " " >> controlDict
 done
@@ -143,14 +143,11 @@ echo "}" >> controlDict
 echo "// ************************************************************************* //" >> controlDict
 cd ..
 
-rm -f log.cupMix
-catalyticMultiRegionSimpleFoamCupMix > log.cupMix
+rm -f log.area
+catalyticMultiRegionSimpleFoamCupMix > log.area
 
-rm -f G.txt
-cat log.cupMix | grep 'sum(sampledSurface) for G' | awk '{print$5}' > G.txt
-
-rm -f $name.txt
-cat log.cupMix | grep "sum(sampledSurface) for cup_${name}" | awk '{print$5}' > $name.txt
+rm -f $name-$region.txt
+cat log.area | grep "areaAverage(sampledSurface) for ${name}" | awk '{print$5}' > $name-$region.txt
 
 rm -rf postProcessing
 
