@@ -16,7 +16,7 @@ forAll(fluidRegions, j)
                 runTime.timeName(),
                 fluidRegions[j],
                 IOobject::NO_READ,
-                IOobject::AUTO_WRITE
+                IOobject::NO_WRITE
             ),
             fluidRegions[j],
             dimensionedScalar("zero", dimensionSet(1, -2, -1, 0, 0), 0.0)
@@ -36,7 +36,7 @@ forAll(fluidRegions, j)
                 runTime.timeName(),
                 fluidRegions[j],
                 IOobject::NO_READ,
-                IOobject::AUTO_WRITE
+                IOobject::NO_WRITE
             ),
             fluidRegions[j],
             dimensionedScalar("zero", dimensionSet(1, -2, -1, 1, 0), 0.0)
@@ -59,7 +59,7 @@ forAll(fluidRegions, j)
                     runTime.timeName(),
                     fluidRegions[j],
                     IOobject::NO_READ,
-                    IOobject::AUTO_WRITE
+                    IOobject::NO_WRITE
                 ),
                 fluidRegions[j],
                 dimensionedScalar("zero", dimensionSet(1, -2, -1, 0, 0), 0.0)
