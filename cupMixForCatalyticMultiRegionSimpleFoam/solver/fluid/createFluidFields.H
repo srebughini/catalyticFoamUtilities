@@ -27,11 +27,10 @@ List<scalar>                initialMassFluid(fluidRegions.size());
 List<label>                 pRefCellFluid(fluidRegions.size(), 0);
 List<scalar>                pRefValueFluid(fluidRegions.size(), 0.0);
 
+PtrList<volScalarField>     QFluid(fluidRegions.size());
+
 forAll(fluidRegions, j)
 {
-    Info<< "Reading region " << fluidRegions[j].name() << "\n" << endl;
-
-    Info<< "Reading field U\n" << endl;
     UFluid.set
     (
         j,
@@ -49,7 +48,6 @@ forAll(fluidRegions, j)
         )
     );
         
-    Info<< "Reading field p\n" << endl;
     pFluid.set
     (
         j,
@@ -66,8 +64,7 @@ forAll(fluidRegions, j)
             fluidRegions[j]
         )
     );
-        
-    Info<< "Reading field T\n" << endl;
+
     TFluid.set
     (
         j,
@@ -138,6 +135,25 @@ forAll(fluidRegions, j)
             dimensionedScalar("zero", dimensionSet(1, -1, -1, 0, 0), 1.8e-5)
         )
     );
+
+    QFluid.set
+    (
+        j,
+        new volScalarField
+        (
+            IOobject
+            (
+                "Q",
+                runTime.timeName(),
+                fluidRegions[j],
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            fluidRegions[j],
+            dimensionedScalar("Q", dimensionSet(1, -1, -3, 0, 0), 0.0)
+        )
+    );
+
 
     lambdaFluid.set
     (
@@ -213,7 +229,6 @@ forAll(fluidRegions, j)
 
     for(unsigned int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
     {
-        Info << "Reading species: " << thermodynamicsMapXML->NamesOfSpecies()[i] << " > ";
         IOobject header
         (
             thermodynamicsMapXML->NamesOfSpecies()[i],
@@ -221,8 +236,7 @@ forAll(fluidRegions, j)
             fluidRegions[j],
             IOobject::NO_READ
         );
-        
-        Info << thermodynamicsMapXML->NamesOfSpecies()[i] << endl;
+
         YFluid.set
         (
             j*thermodynamicsMapXML->NumberOfSpecies()+i,
@@ -383,5 +397,3 @@ forAll(fluidRegions, j)
     rhoMin.set(j, new dimensionedScalar(simpleDict.lookup("rhoMin")));
 
 }
-
-Info << endl;

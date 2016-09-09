@@ -27,12 +27,10 @@ PtrList<volScalarField>     TSolidNormalized(solidRegions.size());
 PtrList<volScalarField>     YSolidNormalized(thermodynamicsMapXML->NumberOfSpecies()*solidRegions.size());
 
 PtrList<volScalarField>     binSolid(solidRegions.size());
-
+PtrList<volScalarField>     QSolid(solidRegions.size());
 
 forAll(solidRegions, j)
 {
-    Info<< "Reading region " << solidRegions[j].name() << "\n" << endl;   
-
     rhoSolid.set
     (   j,
         new volScalarField
@@ -50,7 +48,6 @@ forAll(solidRegions, j)
         )
     );
 
-    Info<< "Reading field T\n" << endl;
     TSolid.set
     (
         j,
@@ -160,7 +157,6 @@ forAll(solidRegions, j)
     );
 
 
-    Info<< "Reading field p\n" << endl;
     pSolid.set
     (
         j,
@@ -253,6 +249,24 @@ forAll(solidRegions, j)
         )
     );
 
+    QSolid.set
+    (
+        j,
+        new volScalarField
+        (
+            IOobject
+            (
+                "Q",
+                runTime.timeName(),
+                solidRegions[j],
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            solidRegions[j],
+            dimensionedScalar("Q", dimensionSet(1, -1, -3, 0, 0), 0.0)
+        )
+    );
+
     sourceExplicitTempSolid.set
     (
         j,
@@ -273,7 +287,6 @@ forAll(solidRegions, j)
 
     for(unsigned int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
     {
-        Info << "Reading species: " << thermodynamicsMapXML->NamesOfSpecies()[i] << " > ";
         IOobject header
         (
             thermodynamicsMapXML->NamesOfSpecies()[i],
@@ -282,7 +295,6 @@ forAll(solidRegions, j)
             IOobject::NO_READ
         );
         
-        Info << thermodynamicsMapXML->NamesOfSpecies()[i] << endl;
         YSolid.set
         (
             j*thermodynamicsMapXML->NumberOfSpecies()+i,
@@ -452,7 +464,6 @@ forAll(solidRegions, j)
     for(int i=0;i<surfaceThermodynamicsMapXML->number_of_site_species();i++)
     {
         std::string name = surfaceThermodynamicsMapXML->NamesOfSpecies()[i+surfaceThermodynamicsMapXML->number_of_gas_species()];
-        Info << "Reading adsorbed species: " << name << " > ";
         IOobject header
         (
             name,
@@ -463,7 +474,6 @@ forAll(solidRegions, j)
 
         if (header.headerOk())
         {
-            Info << name << endl;
             ZSolid.set
             (
                 j*surfaceThermodynamicsMapXML->number_of_site_species()+i,
@@ -483,7 +493,6 @@ forAll(solidRegions, j)
         }
         else
         {
-            Info << "thetaDefault" << endl;
             volScalarField thetaDefault
             (
                 IOobject
@@ -516,5 +525,3 @@ forAll(solidRegions, j)
         }
     }
 }
-
-Info << endl;

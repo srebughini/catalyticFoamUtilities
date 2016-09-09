@@ -6,7 +6,7 @@ EXE_INC = \
     $(EXTERNAL_ODE_SOLVERS) \
     -Iode \
     -Ipolicies \
-    -Iisat \
+    -Ichemistry \
     -Ifluid \
     -Isolid \
     -Iinclude \
