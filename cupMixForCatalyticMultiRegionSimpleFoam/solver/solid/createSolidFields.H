@@ -409,7 +409,7 @@ forAll(solidRegions, j)
             (
                 IOobject
                 (
-                    "R::"+ thermodynamicsMapXML->NamesOfSpecies()[i],
+                    "R_"+ thermodynamicsMapXML->NamesOfSpecies()[i],
                     runTime.timeName(),
                     solidRegions[j],
                     IOobject::NO_READ,

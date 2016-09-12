@@ -19,7 +19,12 @@ forAll(fluidRegions, j)
         y[NEQ] = TCells[celli];
 
         hom.reactionSourceTerms(*thermodynamicsMapXML,*kineticsMapXML,y,pCells[celli],Source);
-        
+
+        for(unsigned int i=0;i<NC;i++)
+        {
+            RFluid[j*NC+i].internalField()[celli]   = Source[i+1];
+        }
+
         QFluid[j].internalField()[celli] = Source[NEQ];
     }
 }

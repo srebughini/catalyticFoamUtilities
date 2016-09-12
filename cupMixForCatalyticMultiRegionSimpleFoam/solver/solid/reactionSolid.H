@@ -34,7 +34,12 @@ forAll(solidRegions, j)
         het.setCoverage(Z);
         het.reactionSourceTerms(y,Source);
 
+        for(unsigned int i=0;i<NC;i++)
+        {
+            RSolid[j*NC+i].internalField()[celli] = Source[i+1];
+        }
+
+
         QSolid[j].internalField()[celli] = Source[NEQ];
-        std::cout << "Q: " << Source[NEQ] << std::endl;
     }
 }

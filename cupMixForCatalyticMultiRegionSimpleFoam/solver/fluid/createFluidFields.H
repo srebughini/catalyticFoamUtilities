@@ -333,7 +333,7 @@ forAll(fluidRegions, j)
             (
                 IOobject
                 (
-                    "R::"+ thermodynamicsMapXML->NamesOfSpecies()[i],
+                    "R_"+ thermodynamicsMapXML->NamesOfSpecies()[i],
                     runTime.timeName(),
                     fluidRegions[j],
                     IOobject::NO_READ,
