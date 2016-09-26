@@ -135,7 +135,7 @@ do
 	echo "	// Operation: areaAverage/sum/weightedAverage ..." >> controlDict
 	echo "	operation      sum; //areaAverage; //areaIntegrate;" >> controlDict
 
-	echo "	fields          (G cup_$name);" >> controlDict
+	echo "	fields          (G cup_mass_$name);" >> controlDict
 	echo "}" >> controlDict
 	echo " " >> controlDict
 done
@@ -150,7 +150,7 @@ rm -f G.txt
 cat log.cupMix | grep 'sum(sampledSurface) for G' | awk '{print$5}' > G.txt
 
 rm -f $name.txt
-cat log.cupMix | grep "sum(sampledSurface) for cup_${name}" | awk '{print$5}' > $name.txt
+cat log.cupMix | grep "sum(sampledSurface) for cup_mass_${name}" | awk '{print$5}' > $name.txt
 
 rm -rf postProcessing
 
