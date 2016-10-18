@@ -3,6 +3,7 @@ PtrList<volScalarField>     cupMoleFluid(thermodynamicsMapXML->NumberOfSpecies()
 PtrList<volScalarField>     gFluid(fluidRegions.size());
 PtrList<volScalarField>     cTotFluid(fluidRegions.size());
 PtrList<volScalarField>     cupTFluid(fluidRegions.size());
+PtrList<volScalarField>     cupQFluid(fluidRegions.size());
 
 forAll(fluidRegions, j)
 {
@@ -67,6 +68,26 @@ forAll(fluidRegions, j)
     );
 
     cupTFluid[j] = gFluid[j]*TFluid[j];
+
+    cupQFluid.set
+    (
+        j,
+        new volScalarField
+        (
+            IOobject
+            (
+                "cup_Q",
+                runTime.timeName(),
+                fluidRegions[j],
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            fluidRegions[j],
+            dimensionedScalar("zero", dimensionSet(2, -3, -4, 0, 0), 0.0)
+        )
+    );
+
+    cupQFluid[j] = gFluid[j]*QFluid[j];
 
 
     for(unsigned int i=0;i<thermodynamicsMapXML->NumberOfSpecies();i++)
