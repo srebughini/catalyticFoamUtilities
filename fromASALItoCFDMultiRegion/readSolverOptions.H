@@ -48,21 +48,6 @@ const dictionary& kineticsDictionary = solverOptions.subDict("Kinetics");
     }
 }
 
-Switch               energy;
-label                inertIndex;
-label                catalystIndex;
-
-const dictionary& physicalModelDictionary = solverOptions.subDict("PhysicalModel");
-{
-    energy           = Switch(physicalModelDictionary.lookup(word("energy")));
-
-    word inertSpecies(physicalModelDictionary.lookup("inert"));
-    inertIndex = thermodynamicsMapXML->IndexOfSpecies(inertSpecies)-1;
-
-    word catalystSpecies(physicalModelDictionary.lookup("catalyst"));
-    catalystIndex = surfaceThermodynamicsMapXML->IndexOfSpecies(catalystSpecies)-surfaceThermodynamicsMapXML->number_of_gas_species()-1;
-}
-
 unsigned int directionIndex;
 unsigned int radialIndex1;
 unsigned int radialIndex2;

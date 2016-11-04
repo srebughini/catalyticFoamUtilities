@@ -53,11 +53,11 @@ int main(int argc, char *argv[])
     #include "createFinalFields.H"
 
     #include "initContinuityErrs.H"
-    
-    #include "cupMix.H"
 
     #include "reactionFluid.H"
     #include "reactionSolid.H"
+
+    #include "cupMix.H"
 
     bool cupMixExit = true;
     while (runTime.loop())
