@@ -35,8 +35,6 @@ int main(int argc, char **argv)
     #include "readFluidProperties.H"
     #include "readSolidProperties.H"
     
-    meshWarning();
-    
     if ( asaliSolver == "heterogeneousPFR" )
     {
         #include "hetereogeneousPFRresults.H"
@@ -46,6 +44,7 @@ int main(int argc, char **argv)
     }
     else if ( asaliSolver == "2Ds" )
     {
+        meshWarning();
         #include "2Dresults.H"
         #include "createFluidFields.H"
         #include "createSolidFields.H"
