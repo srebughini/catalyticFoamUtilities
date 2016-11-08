@@ -27,6 +27,8 @@ int main(int argc, char **argv)
     #include "createMesh.H"
     #include "readSolverOptions.H"
 
+    meshWarning();
+ 
     if ( asaliSolver == "heterogeneousPFR" )
     {
         #include "hetereogeneousPFRresults.H"
@@ -35,7 +37,6 @@ int main(int argc, char **argv)
     }
     else if ( asaliSolver == "2Ds" )
     {
-        meshWarning();
         #include "2Dresults.H"
         #include "createFields.H"
         #include "2DtoCFD.H"
